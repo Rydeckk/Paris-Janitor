@@ -1,10 +1,12 @@
 import Joi from "joi";
+import { TypeUser } from "../../types/express";
 
 export const createUserValidation = Joi.object<CreateUserValidationRequest>({
     email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
+    phone: Joi.string().required(),
     type: Joi.string().allow("traveler","owner","admin").required()
 }).options({ abortEarly: false });
 
@@ -12,8 +14,9 @@ export interface CreateUserValidationRequest {
     email: string,
     password: string,
     firstName: string,
-    lastName: string
-    type: "traveler" | "owner" | "admin"
+    lastName: string,
+    phone: string,
+    type: TypeUser
 }
 
 export const LoginUserValidation = Joi.object<LoginUserValidationRequest>({
@@ -25,7 +28,7 @@ export const LoginUserValidation = Joi.object<LoginUserValidationRequest>({
 export interface LoginUserValidationRequest {
     email: string
     password: string,
-    type: "traveler" | "owner" | "admin"
+    type: TypeUser
 }
 
 export interface GetUsersRequest {
@@ -99,11 +102,13 @@ export const updateMyUserValidation = Joi.object<UpdateMyUserRequest>({
 export interface UpdateMyInfoUserRequest {
     email?: string,
     firstName?: string,
-    lastName?: string
+    lastName?: string,
+    phone?: string
 }
 
 export const updateMyInfoUserValidation = Joi.object<UpdateMyInfoUserRequest>({
     email: Joi.string().optional(),
     firstName: Joi.string().optional(),
-    lastName: Joi.string().optional()
+    lastName: Joi.string().optional(),
+    phone: Joi.string().optional()
 })

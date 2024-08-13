@@ -18,7 +18,8 @@ export interface UpdateUserParams {
 export interface UpdateMyInfoUserParams {
     email?: string,
     firstName?: string,
-    lastName?: string
+    lastName?: string,
+    phone?: string
 }
 
 export class UserUseCase {
@@ -122,6 +123,10 @@ export class UserUseCase {
 
         if (updateUser.lastName) {
             userFound.lastName = updateUser.lastName
+        }
+
+        if (updateUser.phone) {
+            userFound.phone = updateUser.phone
         }
 
         const repo = this.db.getRepository(User)
