@@ -3,12 +3,12 @@ import { StatutLogement, TypeBien, TypeLocation } from "../types/express";
 import { Logement } from "../database/entities/logement";
 
 interface UpdateLogementParams {
+    nom?: string,
     typeLocation?: TypeLocation
     nbChambres?: number
     capacite?: number
     surface?: number
     prixNuit?: number
-    imageSource?: string
 }
 
 interface FiltersLogement {
@@ -30,6 +30,10 @@ export class LogementUseCase {
         const logementFound = await logementRepo.findOne({where: {id: id}})
         if (logementFound === null) return null
 
+        if(params.nom) {
+            logementFound.nom = params.nom
+        }
+
         if(params.typeLocation) {
             logementFound.typeLocation = params.typeLocation
         }
@@ -50,9 +54,7 @@ export class LogementUseCase {
             logementFound.prixNuit = params.prixNuit
         }
 
-        if(params.imageSource) {
-            logementFound.imageSource = params.imageSource
-        }
+        logementFound.statut = "attenteValidation"
 
         const updatedLogement = await logementRepo.save(logementFound)
         return updatedLogement
@@ -61,6 +63,8 @@ export class LogementUseCase {
     async listLogement(filters: FiltersLogement): Promise<{logements: Logement[]}> {
         const query = this.db.createQueryBuilder(Logement, 'logement')
         query.innerJoinAndSelect("logement.user","user")
+        query.leftJoinAndSelect("logement.photos", "photos")
+        query.leftJoinAndSelect("logement.services", "service")
 
         if(filters.typeLogement !== undefined) {
             query.andWhere("logement.typeLogement = :typeLogement", {typeLogement: filters.typeLogement})
@@ -100,8 +104,21 @@ export class LogementUseCase {
         }
     }
 
-    async getLogement(id: number): Promise <Logement | null> {
-        return await this.db.getRepository(Logement).findOne({where: {id: id}})
+    async getLogement(id: number, userId?: number): Promise <Logement | null> {
+        const query = this.db.createQueryBuilder(Logement,"logement")
+        query.innerJoinAndSelect("logement.user","user")
+        query.leftJoinAndSelect("logement.photos","photo")
+        query.leftJoinAndSelect("logement.services","service")
+        query.where("logement.id = :logementId", {logementId: id})
+
+        if(userId) {
+            query.andWhere("user.id = :userId",{userId: userId})
+        }
+
+        const logementFound = query.getOne()
+        if(logementFound === null) return null
+
+        return logementFound
     }
 
     async deleteLogement(id: number): Promise <Logement | null> {

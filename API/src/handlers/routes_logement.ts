@@ -1,12 +1,13 @@
 import express, { Response } from "express"
 import { Request } from "../types/express"
 import { authMiddleware, authMiddlewareAdmin, authMiddlewareOwner } from "./middleware/auth_middleware"
-import { createLogementValidation, getListLogementValidation, getLogementValidation, updateLogementValidation, updateStatutLogementValidation } from "./validators/logement-validator"
+import { createLogementValidation, getListLogementValidation, getLogementValidation, serviceLogementValidation, updateLogementValidation, updateStatutLogementValidation } from "./validators/logement-validator"
 import { generateValidationErrorMessage } from "./validators/generate-validation-messages"
 import { AppDataSource } from "../database/database"
 import { Logement } from "../database/entities/logement"
 import { LogementUseCase } from "../domain/logement-usecase"
 import { getConnectedUser } from "../domain/user-usecase"
+import { Service } from "../database/entities/service"
 
 export const LogementHandler = (app: express.Express) => {
     app.post("/logement", authMiddlewareOwner, async (req: Request, res: Response) => {
@@ -19,10 +20,18 @@ export const LogementHandler = (app: express.Express) => {
 
         const createLogementRequest = validation.value
 
+        const userId = +req.user.userId
+        const userFound = await getConnectedUser(userId, AppDataSource)
+
+        if (!userFound) {
+            res.status(404).send({error: `User ${userId} not found`})
+            return
+        }
+
         try {
             
-            const logementCreated = await AppDataSource.getRepository(Logement).save({...createLogementRequest})
-            
+            const logementCreated = await AppDataSource.getRepository(Logement).save({...createLogementRequest, user: userFound})
+
             res.status(200).send(logementCreated)
         }catch(error) {
             console.log(error)
@@ -44,7 +53,7 @@ export const LogementHandler = (app: express.Express) => {
             
             const logementUseCase = new LogementUseCase(AppDataSource)
             const listLogement = await logementUseCase.listLogement({...listLogementRequest})
-            res.status(200).send(listLogement)
+            res.status(200).send(listLogement.logements)
 
         }catch(error) {
             console.log(error)
@@ -172,6 +181,84 @@ export const LogementHandler = (app: express.Express) => {
             res.status(200).send(deletedLogement)
 
         }catch(error) {
+            console.log(error)
+            res.status(500).send({error: "Internal error"})
+        }
+    })
+
+    app.post("/logement/:logementId/service/:id", authMiddlewareOwner, async (req: Request, res: Response) => {
+        const validation = serviceLogementValidation.validate(req.params)
+
+        if(validation.error) {
+            res.status(400).send(generateValidationErrorMessage(validation.error.details))
+            return
+        }
+
+        const addServiceLogementRequest = validation.value
+
+        const userId = +req.user.userId
+        const userFound = await getConnectedUser(userId, AppDataSource)
+
+        const serviceFound = await AppDataSource.getRepository(Service).findOne({where: {id: addServiceLogementRequest.id}, relations: ["logements"]})
+        if(serviceFound === null) {
+            res.status(404).send({error: `Service ${addServiceLogementRequest.id} not found`})
+            return
+        }
+
+        if(serviceFound.logements.filter((logement) => logement.id === addServiceLogementRequest.logementId).length > 0) {
+            return
+        }
+
+        try {
+            
+            const logementUseCase = new LogementUseCase(AppDataSource)
+            const logementFound = await logementUseCase.getLogement(addServiceLogementRequest.logementId, userFound?.id)
+            if(logementFound === null) {
+                res.status(404).send({error: `Logement ${addServiceLogementRequest.logementId} not found`})
+                return
+            }
+            logementFound.services.push(serviceFound)
+            const updatedLogement = await AppDataSource.getRepository(Logement).save(logementFound)
+            res.status(201).send(updatedLogement)
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).send({error: "Internal error"})
+        }
+    })
+
+    app.delete("/logement/:logementId/service/:id", authMiddlewareOwner, async (req: Request, res: Response) => {
+        const validation = serviceLogementValidation.validate(req.params)
+
+        if(validation.error) {
+            res.status(400).send(generateValidationErrorMessage(validation.error.details))
+            return
+        }
+
+        const removeServiceLogementRequest = validation.value
+
+        const userId = +req.user.userId
+        const userFound = await getConnectedUser(userId, AppDataSource)
+
+        const serviceFound = await AppDataSource.getRepository(Service).findOne({where: {id: removeServiceLogementRequest.id}, relations: ["logements"]})
+        if(serviceFound === null) {
+            res.status(404).send({error: `Service ${removeServiceLogementRequest.id} not found`})
+            return
+        }
+
+        try {
+            
+            const logementUseCase = new LogementUseCase(AppDataSource)
+            const logementFound = await logementUseCase.getLogement(removeServiceLogementRequest.logementId, userFound?.id)
+            if(logementFound === null) {
+                res.status(404).send({error: `Logement ${removeServiceLogementRequest.logementId} not found`})
+                return
+            }
+            logementFound.services = logementFound.services.filter((service) => service.id !== removeServiceLogementRequest.id)
+            const updatedLogement = await AppDataSource.getRepository(Logement).save(logementFound)
+            res.status(201).send(updatedLogement)
+
+        } catch (error) {
             console.log(error)
             res.status(500).send({error: "Internal error"})
         }

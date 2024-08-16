@@ -49,7 +49,7 @@ export const RoleHandler = (app: express.Express) => {
         try {
             const roleUseCase = new RoleUseCase(AppDataSource)
             const selectedRole = await roleUseCase.getListRole({ ...listRolesRequest, page, limit })
-            res.status(200).send(selectedRole)
+            res.status(200).send(selectedRole.roles)
         }catch(error) {
             console.log(error)
             res.status(500).send({ error: "Internal error" })

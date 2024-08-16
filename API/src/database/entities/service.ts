@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { TypeService } from "../../types/express";
+import { Logement } from "./logement";
 
 @Entity({name: "Service"})
 export class Service {
@@ -9,15 +11,19 @@ export class Service {
     nom: string
 
     @Column()
-    type: string
+    type: TypeService
 
     @Column()
     prix: number
 
-    constructor(id: number, nom: string, type: string, prix: number) {
+    @ManyToMany(() => Logement, logement => logement.services)
+    logements: Logement[]
+
+    constructor(id: number, nom: string, type: TypeService, prix: number, logements: Logement[]) {
         this.id = id,
         this.nom = nom,
         this.type = type,
-        this.prix = prix
+        this.prix = prix,
+        this.logements = logements
     }
 }

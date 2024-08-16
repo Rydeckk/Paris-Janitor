@@ -2,6 +2,7 @@ import Joi from "joi"
 import { StatutLogement, TypeBien, TypeLocation } from "../../types/express"
 
 interface CreateLogementRequest {
+    nom: string,
     adresse: string
     typeLogement: TypeBien
     typeLocation: TypeLocation
@@ -9,38 +10,37 @@ interface CreateLogementRequest {
     capacite: number
     surface: number
     prixNuit: number
-    imageSource?: string
 }
 
 export const createLogementValidation = Joi.object<CreateLogementRequest>({
     adresse: Joi.string().required(),
-    typeLogement: Joi.string().allow("maison","appartement").required(),
-    typeLocation: Joi.string().allow("entier","partiel").required(),
+    nom: Joi.string().min(2).required(),
+    typeLogement: Joi.string().valid("maison","appartement").required(),
+    typeLocation: Joi.string().valid("entier","partiel").required(),
     nbChambres: Joi.number().min(0).required(),
     capacite: Joi.number().min(1).required(),
     surface: Joi.number().min(9).required(),
-    prixNuit: Joi.number().min(1).required(),
-    imageSource: Joi.string().optional()
+    prixNuit: Joi.number().min(1).required()
 })
 
 interface UpdateLogementRequest {
     id: number
+    nom?: string,
     typeLocation?: TypeLocation
     nbChambres?: number
     capacite?: number
     surface?: number
     prixNuit?: number
-    imageSource?: string
 }
 
 export const updateLogementValidation = Joi.object<UpdateLogementRequest>({
-    id: Joi.number().min(0).required(),
-    typeLocation: Joi.string().allow("entier","partiel").optional(),
+    id: Joi.number().min(1).required(),
+    nom: Joi.string().min(2).optional(),
+    typeLocation: Joi.string().valid("entier","partiel").optional(),
     nbChambres: Joi.number().min(0).optional(),
     capacite: Joi.number().min(1).optional(),
     surface: Joi.number().min(9).optional(),
-    prixNuit: Joi.number().min(1).optional(),
-    imageSource: Joi.string().optional()
+    prixNuit: Joi.number().min(1).optional()
 })
 
 interface GetLogementRequest {
@@ -48,7 +48,7 @@ interface GetLogementRequest {
 }
 
 export const getLogementValidation = Joi.object<GetLogementRequest>({
-    id: Joi.number().min(0).required()
+    id: Joi.number().min(1).required()
 })
 
 interface GetListLogementRequest {
@@ -62,13 +62,13 @@ interface GetListLogementRequest {
 }
 
 export const getListLogementValidation = Joi.object<GetListLogementRequest>({
-    typeLogement: Joi.string().allow("maison","appartement").optional(),
-    typeLocation: Joi.string().allow("entier","partiel").optional(),
+    typeLogement: Joi.string().valid("maison","appartement").optional(),
+    typeLocation: Joi.string().valid("entier","partiel").optional(),
     nbChambres: Joi.number().min(0).optional(),
     capacite: Joi.number().min(1).optional(),
     surface: Joi.number().min(9).optional(),
     prixNuit: Joi.number().min(1).optional(),
-    statut: Joi.string().allow("en attente","valide","refuse").optional()
+    statut: Joi.string().valid("attenteValidation","valide","refuse","inactif").optional()
 })
 
 interface UpdateStatutLogement {
@@ -77,6 +77,16 @@ interface UpdateStatutLogement {
 }
 
 export const updateStatutLogementValidation = Joi.object<UpdateStatutLogement>({
-    id: Joi.number().min(0).required(),
-    statut: Joi.string().allow("en attente","refuse","valide")
+    id: Joi.number().min(1).required(),
+    statut: Joi.string().valid("attenteValidation","refuse","valide","inactif").required()
+})
+
+interface ServiceLogement {
+    logementId: number,
+    id: number
+}
+
+export const serviceLogementValidation = Joi.object<ServiceLogement>({
+    id: Joi.number().min(1).required(),
+    logementId: Joi.number().min(1).required()
 })
