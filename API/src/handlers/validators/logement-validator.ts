@@ -1,9 +1,12 @@
 import Joi from "joi"
-import { StatutLogement, TypeBien, TypeLocation } from "../../types/express"
+import { StatutLogement, TypeBien, TypeLocation } from "../../types/types"
 
 interface CreateLogementRequest {
     nom: string,
     adresse: string
+    codePostal: string
+    ville: string,
+    pays: string
     typeLogement: TypeBien
     typeLocation: TypeLocation
     nbChambres: number
@@ -14,6 +17,9 @@ interface CreateLogementRequest {
 
 export const createLogementValidation = Joi.object<CreateLogementRequest>({
     adresse: Joi.string().required(),
+    codePostal: Joi.string().min(5).max(5).required(),
+    ville: Joi.string().required(),
+    pays: Joi.string().required(),
     nom: Joi.string().min(2).required(),
     typeLogement: Joi.string().valid("maison","appartement").required(),
     typeLocation: Joi.string().valid("entier","partiel").required(),

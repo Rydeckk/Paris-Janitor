@@ -2,6 +2,7 @@ import express from "express";
 import { initRoutes } from "./handlers/routes";
 import { AppDataSource } from "./database/database";
 import cors from "cors"
+import path from "path"
 
 
 
@@ -29,7 +30,11 @@ const main = async () => {
         process.exit(1)
     }
 
-    app.use(express.json())
+    const uploadsDir = path.join(__dirname, '../uploads/images/');
+
+    app.use('/images', express.static(uploadsDir));
+
+    app.use(express.json(({ limit: '10mb' })))
 
     initRoutes(app)
     

@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { TypeUser } from "../../types/express";
+import { TypeUser } from "../../types/types"
 
 export const createUserValidation = Joi.object<CreateUserValidationRequest>({
     email: Joi.string().email().required(),

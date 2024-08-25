@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { TypeService } from "../types/express";
+import { TypeService } from "../types/types"
 import { Service } from "../database/entities/service";
 
 interface UpdateServiceParams {

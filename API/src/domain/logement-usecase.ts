@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { StatutLogement, TypeBien, TypeLocation } from "../types/express";
+import { StatutLogement, TypeBien, TypeLocation } from "../types/types"
 import { Logement } from "../database/entities/logement";
 
 interface UpdateLogementParams {
@@ -27,7 +27,7 @@ export class LogementUseCase {
 
     async updateLogement(id: number, params: UpdateLogementParams): Promise<Logement | null> {
         const logementRepo = this.db.getRepository(Logement)
-        const logementFound = await logementRepo.findOne({where: {id: id}})
+        const logementFound = await logementRepo.findOne({where: {id: id}, relations: ["services","user","photos","datesIndisponibles"]})
         if (logementFound === null) return null
 
         if(params.nom) {
@@ -65,6 +65,7 @@ export class LogementUseCase {
         query.innerJoinAndSelect("logement.user","user")
         query.leftJoinAndSelect("logement.photos", "photos")
         query.leftJoinAndSelect("logement.services", "service")
+        query.leftJoinAndSelect("logement.datesIndisponibles", "dates")
 
         if(filters.typeLogement !== undefined) {
             query.andWhere("logement.typeLogement = :typeLogement", {typeLogement: filters.typeLogement})
@@ -109,13 +110,14 @@ export class LogementUseCase {
         query.innerJoinAndSelect("logement.user","user")
         query.leftJoinAndSelect("logement.photos","photo")
         query.leftJoinAndSelect("logement.services","service")
+        query.leftJoinAndSelect("logement.datesIndisponibles", "dates")
         query.where("logement.id = :logementId", {logementId: id})
 
         if(userId) {
             query.andWhere("user.id = :userId",{userId: userId})
         }
 
-        const logementFound = query.getOne()
+        const logementFound = await query.getOne()
         if(logementFound === null) return null
 
         return logementFound

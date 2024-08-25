@@ -1,5 +1,5 @@
 import Joi from "joi"
-import { TypeService } from "../../types/express"
+import { TypeService } from "../../types/types"
 
 interface CreateServiceRequest {
     nom: string,

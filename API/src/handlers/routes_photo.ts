@@ -8,10 +8,24 @@ import { getConnectedUser } from "../domain/user-usecase"
 import { Photo } from "../database/entities/photo"
 import { LogementUseCase } from "../domain/logement-usecase"
 import { PhotoUseCase } from "../domain/photo-usecase"
+import multer from "multer"
+import fs from "fs-extra"
+import path from "path"
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/images/')
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + '-' + file.originalname)
+    }
+});
+  
+const upload = multer({ storage: storage, limits:  {fileSize: 10 * 1024 * 1024} });
 
 export const PhotoHandler = (app: express.Express) => {
-    app.post("/logement/:logementId/photo", authMiddlewareOwner, async (req: Request, res: Response) => {
-        const validation = createPhotoValidation.validate({...req.params,...req.body})
+    app.post("/logement/:logementId/photo", authMiddlewareOwner, upload.single('image'), async (req: Request, res: Response) => {
+        const validation = createPhotoValidation.validate(req.params)
 
         if(validation.error) {
             res.status(400).send(generateValidationErrorMessage(validation.error.details))
@@ -19,6 +33,10 @@ export const PhotoHandler = (app: express.Express) => {
         }
 
         const createPhotoRequest = validation.value
+
+        if (!req.file) {
+            return res.status(400).send('Aucun fichier uploadé.');
+        }
 
         const userId = +req.user.userId
         const userFound = await getConnectedUser(userId, AppDataSource)
@@ -37,10 +55,8 @@ export const PhotoHandler = (app: express.Express) => {
 
         try {
             
-            const photoCreated = await AppDataSource.getRepository(Photo).save({...createPhotoRequest, logement: logementFound, path: "/public/images/" + logementFound.id + "/" + createPhotoRequest.name})
+            const photoCreated = await AppDataSource.getRepository(Photo).save({name: req.file.filename, logement: logementFound, path: `/images/${req.file.filename}`})
             
-            //TODO 
-            //Télécharger l'image envoyé
             res.status(200).send(photoCreated)
         }catch(error) {
             console.log(error)
@@ -77,12 +93,17 @@ export const PhotoHandler = (app: express.Express) => {
         try {
             const photoUseCase = new PhotoUseCase(AppDataSource)
             const photoDeleted = await photoUseCase.deletePhoto(deletePhotoRequest.id, logementFound.id)
-            //TODO
-            //Supprimer image dans dossier
+            
             if(photoDeleted === null) {
                 res.status(404).send({error: `Photo ${deletePhotoRequest.id} not found`})
                 return
             }
+
+            fs.remove("uploads/images/"+ photoDeleted.name)
+            .catch((err) => {
+                res.status(500).send({ error: {err} })
+            })
+
             res.status(200).send(photoDeleted)
         }catch(error) {
             console.log(error)

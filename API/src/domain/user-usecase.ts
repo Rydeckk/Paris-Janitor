@@ -30,6 +30,7 @@ export class UserUseCase {
         query.skip((listUserFilter.page - 1) * listUserFilter.limit)
         query.take(listUserFilter.limit)
         query.innerJoinAndSelect('user.role','role')
+        query.leftJoinAndSelect("user.devis", "devis")
 
         if(listUserFilter.isAdmin !== undefined) {
             query.andWhere('role.isAdmin= :isAdmin', {isAdmin: listUserFilter.isAdmin})
@@ -48,6 +49,7 @@ export class UserUseCase {
     async getUser(id: number): Promise<User | null> {
         const query = this.db.createQueryBuilder(User, "user")
         query.innerJoinAndSelect("user.role","role")
+        query.leftJoinAndSelect("user.devis", "devis")
         query.where("user.id = :id", {id: id})
 
         const userFound = await query.getOne()
@@ -59,6 +61,7 @@ export class UserUseCase {
     async getUserByToken(token: string): Promise<User | null> {
         const queryToken = this.db.createQueryBuilder(Token, 'token')
         queryToken.innerJoinAndSelect('token.user','user')
+        queryToken.leftJoinAndSelect("user.devis", "devis")
         queryToken.where('token.token= token',{token: token})
         const tokenFound = await queryToken.getOne()
 
@@ -68,6 +71,7 @@ export class UserUseCase {
 
         const queryUser = this.db.createQueryBuilder(User, 'user')
         queryUser.innerJoinAndSelect('user.role','role')
+        queryUser.leftJoinAndSelect("user.devis", "devis")
         queryUser.where('user.id= :userId',{userId: tokenFound.user.id})
 
         const user = await queryUser.getOne()
@@ -82,6 +86,7 @@ export class UserUseCase {
     async updateUser(id: number, updateUser: UpdateUserParams): Promise<User | null> {
         const query = this.db.createQueryBuilder(User,"user")
         query.innerJoinAndSelect("user.role","role")
+        query.leftJoinAndSelect("user.devis", "devis")
         query.where("user.id = :userId", {userId: id})
 
         const userFound = await query.getOne()
@@ -107,6 +112,7 @@ export class UserUseCase {
     async updateMyInfoUser(id: number, updateUser: UpdateMyInfoUserParams): Promise<User | null> {
         const query = this.db.createQueryBuilder(User,"user")
         query.innerJoinAndSelect("user.role","role")
+        query.leftJoinAndSelect("user.devis", "devis")
         query.where("user.id = :userId", {userId: id})
 
         const userFound = await query.getOne()
@@ -137,6 +143,7 @@ export class UserUseCase {
     async deleteUser(id: number): Promise<User | null> {
         const query = this.db.createQueryBuilder(User,"user")
         query.innerJoinAndSelect("user.role","role")
+        query.leftJoinAndSelect("user.devis", "devis")
         query.where("user.id = :userId", {userId: id})
 
         const userFound = await query.getOne()

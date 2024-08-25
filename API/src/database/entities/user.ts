@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, Ma
 import { Token } from "./token"
 import { Role } from "./role"
 import { Logement } from "./logement"
+import { Devis } from "./devis"
 
 @Entity()
 export class User {
@@ -35,7 +36,10 @@ export class User {
     @OneToMany(() => Logement, logement => logement.user, {onDelete: 'CASCADE'})
     logements: Logement[]
 
-    constructor(id: number, email: string, password: string, firstName: string, lastName: string, phone: string, role: Role, createdAt: Date, tokens: Token[], logements: Logement[]) {
+    @OneToMany(() => Devis, devis => devis.user)
+    devis: Devis[]
+
+    constructor(id: number, email: string, password: string, firstName: string, lastName: string, phone: string, role: Role, createdAt: Date, tokens: Token[], logements: Logement[], devis: Devis[]) {
             this.id = id,
             this.email = email,
             this.password = password,
@@ -45,6 +49,7 @@ export class User {
             this.role = role
             this.createdAt = createdAt,
             this.tokens = tokens,
-            this.logements = logements
+            this.logements = logements,
+            this.devis = devis
     }
 }

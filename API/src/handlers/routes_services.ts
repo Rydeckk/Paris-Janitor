@@ -43,7 +43,28 @@ export const ServiceHandler = (app: express.Express) => {
             const serviceUseCase = new ServiceUseCase(AppDataSource)
             const listServices = await serviceUseCase.listService(getListServiceRequest)
 
-            res.status(200).send(listServices.services)
+            res.status(200).send(listServices)
+        } catch (error) {
+            console.log(error)
+            res.status(500).send({error: "Internal error"})
+        }
+    })
+
+    app.get("/serviceOwner", async (req: Request, res: Response) => {
+        const validation = getListServiceValidation.validate(req.query)
+
+        if(validation.error) {
+            res.status(400).send(generateValidationErrorMessage(validation.error.details))
+            return
+        }
+
+        const getListServiceRequest = validation.value
+
+        try {
+            const serviceUseCase = new ServiceUseCase(AppDataSource)
+            const listServices = await serviceUseCase.listService({...getListServiceRequest, type: "owner"})
+
+            res.status(200).send(listServices)
         } catch (error) {
             console.log(error)
             res.status(500).send({error: "Internal error"})

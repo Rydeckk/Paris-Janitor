@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { TypeService } from "../../types/express";
+import { TypeService } from "../../types/types"
 import { Logement } from "./logement";
 
 @Entity({name: "Service"})

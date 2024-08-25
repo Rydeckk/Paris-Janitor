@@ -1,8 +1,9 @@
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { StatutLogement, TypeBien, TypeLocation } from "../../types/express";
+import { StatutLogement, TypeBien, TypeLocation } from "../../types/types"
 import { User } from "./user";
 import { Photo } from "./photo";
 import { Service } from "./service";
+import { DateIndisponible } from "./dateIndisponible";
 
 @Entity({name: "Logement"})
 export class Logement {
@@ -14,6 +15,15 @@ export class Logement {
 
     @Column()
     adresse: string
+
+    @Column()
+    codePostal: string
+
+    @Column()
+    ville: string
+
+    @Column()
+    pays: string
 
     @Column()
     typeLogement: TypeBien
@@ -33,7 +43,7 @@ export class Logement {
     @Column()
     prixNuit: number
 
-    @Column({default: "en attente"})
+    @Column({default: "attenteValidation"})
     statut: StatutLogement
 
     @CreateDateColumn({type: "datetime"})
@@ -42,6 +52,9 @@ export class Logement {
     @OneToMany(() => Photo, photo => photo.logement)
     photos: Photo[]
 
+    @OneToMany(() => DateIndisponible, dateIndisponible => dateIndisponible.logement)
+    datesIndisponibles: DateIndisponible[] 
+
     @ManyToOne(() => User, user => user.logements, {onDelete: 'CASCADE'})
     user: User
 
@@ -49,11 +62,14 @@ export class Logement {
     @JoinTable({name: "ServiceLogement"})
     services: Service[]
 
-    constructor(id: number, nom: string, adresse: string, typeLogement: TypeBien, typeLocation: TypeLocation, nbChambres: number, capacite: number, 
-    surface: number,prixNuit: number,imageSource: string, statut: StatutLogement, createdAt: Date, photos: Photo[], user: User, services: Service[]) {
+    constructor(id: number, nom: string, adresse: string, ville: string, pays: string, codePostal: string, typeLogement: TypeBien, typeLocation: TypeLocation, nbChambres: number, capacite: number, 
+    surface: number,prixNuit: number, statut: StatutLogement, createdAt: Date, photos: Photo[], datesIndisponibles: DateIndisponible[], user: User, services: Service[]) {
         this.id = id,
         this.nom = nom,
         this.adresse = adresse,
+        this.ville = ville,
+        this.pays = pays,
+        this.codePostal = codePostal,
         this.typeLogement = typeLogement,
         this.typeLocation = typeLocation,
         this.nbChambres = nbChambres,
@@ -63,6 +79,7 @@ export class Logement {
         this.statut = statut,
         this.createdAt = createdAt,
         this.photos = photos,
+        this.datesIndisponibles = datesIndisponibles,
         this.user = user,
         this.services = services
     }

@@ -31,7 +31,7 @@ export const UserHandler = (app: express.Express) => {
                 roleFound = await repoRole.findOne({where : {isOwner: false, isAdmin: false}})
             }
             if (roleFound === null) {
-                res.status(404).send({"error": "Aucun role disponible"})
+                res.status(404).send({error: "Aucun role disponible"})
                 return
             }
 
@@ -43,14 +43,13 @@ export const UserHandler = (app: express.Express) => {
                 email: user.email,
                 firstName: createUserRequest.firstName,
                 lastName: createUserRequest.lastName,
-                createdAt: user.createdAt,
                 phone: user.phone, 
-                role: user.role.name 
+                role: user.role 
             })
             return
         } catch (error) {
             console.log(error)
-            res.status(500).send({ "error": "internal error retry later" })
+            res.status(500).send({ error: "internal error retry later" })
             return
         }
     })
@@ -75,7 +74,7 @@ export const UserHandler = (app: express.Express) => {
                 roleFound = await repoRole.findOne({where : {isOwner: false, isAdmin: false}})
             }
             if (roleFound === null) {
-                res.status(404).send({"error": "Aucun role disponible"})
+                res.status(404).send({error: "Aucun role disponible"})
                 return
             }
 
@@ -83,14 +82,14 @@ export const UserHandler = (app: express.Express) => {
             const user = await AppDataSource.getRepository(User).findOneBy({ email: loginUserRequest.email, role: roleFound});
 
             if (!user) {
-                res.status(400).send({ error: "username or password not valid" })
+                res.status(400).send({ error: "Email ou mot de passe non valide" })
                 return
             }
 
             // valid password for this user
             const isValid = await compare(loginUserRequest.password, user.password);
             if (!isValid) {
-                res.status(400).send({ error: "username or password not valid" })
+                res.status(400).send({ error: "Email ou mot de passe non valide" })
                 return
             }
             
@@ -102,7 +101,7 @@ export const UserHandler = (app: express.Express) => {
             res.status(200).json({ token });
         } catch (error) {
             console.log(error)
-            res.status(500).send({ "error": "internal error retry later" })
+            res.status(500).send({ error: "internal error retry later" })
             return
         }
     })
