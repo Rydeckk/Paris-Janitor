@@ -6,6 +6,7 @@ import { getDatesInRange, isSameDate } from "../utils/utils-function";
 import { useUserContext } from "../main";
 import { createDateIndisponible } from "../request/requestDateIndisponible";
 import { getLogement } from "../request/requestLogement";
+import { useNavigate } from "react-router-dom";
 
 interface LogementCalendrierProps {
     logement: Logement
@@ -21,11 +22,23 @@ export function LogementCalendrier({logement, onReturn, onUpdate}: LogementCalen
     const [date, setDate] = useState<[Date, Date] | Date | null>(null)
     const [datesDesactiveTmp, setDatesDesactiveTmp] = useState<Date[]>([])
     const [datesDesactive, setDatesDesactive] = useState<Date[]>([])
+    const [datesReservation, setDatesReservation] = useState<Date[]>([])
     const user = useUserContext()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if(logement.datesIndisponibles.length > 0) {
             setDatesDesactive(logement.datesIndisponibles.map((dateIndisponible) => new Date(dateIndisponible.date)))
+        }
+
+        if(logement.reservations.length > 0) {
+            let datesReservation: Date[] = []
+            logement.reservations.forEach((reservation) => {
+                getDatesInRange(new Date(reservation.dateDebut),new Date(reservation.dateFin)).forEach((date) => {
+                    datesReservation.push(date)
+                })
+            })
+            setDatesDesactive([...datesDesactive,...datesReservation])
         }
     }, [logement])
 
@@ -35,6 +48,8 @@ export function LogementCalendrier({logement, onReturn, onUpdate}: LogementCalen
             
             const isRangeValid = !getDatesInRange(start, end).some(date => 
                 datesDesactiveTmp.some(dateDesactive => isSameDate(dateDesactive, date))
+            ) && !getDatesInRange(start, end).some(date => 
+                datesDesactive.some(dateDesactive => isSameDate(dateDesactive, date))
             )
       
             if (isRangeValid) {
@@ -81,6 +96,14 @@ export function LogementCalendrier({logement, onReturn, onUpdate}: LogementCalen
         setDatesDesactiveTmp([])
     }
 
+    const handleSaveDatesReservation = () => {
+        if(Array.isArray(date)) {
+            navigate("/logement/reservation", {state: {dates: [date[0], date[1]]}})
+        } else if (date) {
+            navigate("/logement/reservation", {state: {dates: [date]}})
+        }
+    }
+
     return (
         <div>
             <div className="div_detail">
@@ -88,9 +111,10 @@ export function LogementCalendrier({logement, onReturn, onUpdate}: LogementCalen
                     <Calendar locale="fr" onChange={(value) => handleDateChange(value as [Date, Date] | Date | null)} value={date} selectRange={true} minDate={new Date()} maxDate={datePlus5ans} tileDisabled={tileDesactive}/>
                 </div>
                 <div className="div_end">
-                    <button disabled={date === null} className="button" onClick={handleDisableDates}>Bloquer</button>
-                    <button disabled={datesDesactiveTmp.length === 0} className="button" onClick={handleSaveDisabledDates}>Enregistrer</button>
-                    <button disabled={datesDesactiveTmp.length === 0} className="button" onClick={handleCancelDisabledDates}>Annuler</button>
+                    {user.user?.role.isOwner && (<button disabled={date === null} className="button" onClick={handleDisableDates}>Bloquer</button>)}
+                    {user.user?.role.isOwner && (<button disabled={datesDesactiveTmp.length === 0} className="button" onClick={handleSaveDisabledDates}>Enregistrer</button>)}
+                    {user.user?.role.isOwner && (<button disabled={datesDesactiveTmp.length === 0} className="button" onClick={handleCancelDisabledDates}>Annuler</button>)}
+                    {!user.user?.role.isOwner && (<button disabled={date === null} className="button" onClick={() => handleSaveDatesReservation()}>Réserver</button>)}
                 </div>
             </div>
             <div className="div_return">
@@ -102,3 +126,4 @@ export function LogementCalendrier({logement, onReturn, onUpdate}: LogementCalen
         
     )
 }
+

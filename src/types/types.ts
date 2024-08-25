@@ -15,6 +15,7 @@ export type Logement = {
     createdAt: Date
     photos: Photo[]
     datesIndisponibles: DateIndisponible[]
+    reservations: Reservation[]
     user: UserInfo
     services: Service[]
 }
@@ -55,6 +56,7 @@ export type Service = {
     type: TypeService
     prix: number
     logements: Logement[]
+    reservations: Reservation[]
 }
 
 export type Role = {
@@ -128,6 +130,22 @@ export type Devis = {
     prenom: string,
     dateCreation: Date, 
     user?: UserInfoWithId
+}
+
+export type CreateReservation = {
+    dateDebut: Date,
+    dateFin: Date,
+    montant: number
+}
+
+export type Reservation = {
+    id: number, 
+    dateDebut: Date, 
+    dateFin: Date,
+    montant: number, 
+    user: UserInfoWithId, 
+    logement: Logement, 
+    services: Service[]
 }
 
 export type TypeUser = "traveler" | "owner" | "admin"

@@ -45,13 +45,20 @@ export function ListeLogements({statut}: ListeLogementsProps) {
 
     const handleReturn = () => {
         setLogement(undefined)
-        navigate("/owner/logement")
+        if(typeCompte === "admin") {
+            navigate("/master/logement")
+        } else if (typeCompte === "owner") {
+            navigate("/owner/logement")
+        } else {
+            navigate("/logement")
+        }
+        
     }
 
     return (
         <div>
             {!logement && (<div>
-                <label className="title">Mes Logements</label>
+                <label className="title">{user.user?.role.isOwner ? "Mes Logements" : "Logements disponibles"}</label>
                 <div className="div_liste_horizontal">
                     {listeLogements.map((logement) => (
                         <LogementComponent key={logement.id} logement={logement} onClick={(logement) => setLogement(logement)}/>

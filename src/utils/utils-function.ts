@@ -76,3 +76,12 @@ export function getDatesInRange (startDate: Date, endDate: Date): Date[] {
     }
     return dates;
 }
+
+export function differenceEnJours(date1: Date, date2: Date): number {
+    const millisecondesParJour = 1000 * 60 * 60 * 24 // Nombre de millisecondes dans une journée
+    const diffInMs = Math.abs(date2.getTime() - date1.getTime())
+    if(diffInMs < 0) {
+        return Math.floor((Math.abs(date1.getTime() - date2.getTime())) / millisecondesParJour)
+    }
+    return Math.floor(diffInMs / millisecondesParJour)
+}

@@ -31,7 +31,7 @@ export async function getListMyLogement(): Promise<{logements: Array<Logement>}>
 export async function getListLogement(statut?: StatutLogement): Promise<{logements: Array<Logement>}> {
     const url = new URL(import.meta.env.VITE_URL_API+"/logement?")
     if(statut) {
-        url.searchParams.append(statut, statut)
+        url.searchParams.append("statut", statut)
     }
     const headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer '+ localStorage.getItem("token")})
     const response = await fetch(url.toString(), {

@@ -3,8 +3,10 @@ import { ListeLogements } from "../component/ListeLogements";
 import { NavBarTraveler } from "../component/NavBarTraveler";
 import { useUserContext } from "../main";
 import { spaceColors, TypeUser } from "../types/types";
-import { useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { getTypeUser } from "../utils/utils-function";
+import { Login } from "../component/Login";
+import { SignUp } from "../component/SignUp";
 
 export function Home() {
     const [typeCompte, setTypeCompte] = useState<TypeUser>("traveler")
@@ -26,7 +28,8 @@ export function Home() {
             navigate("/owner/logement")
         } else {
             document.documentElement.style.setProperty('--couleur-principale', spaceColors["traveler"])
-        }  
+        } 
+        
     }, [typeCompte])
 
     const handleClick = () => {
@@ -36,10 +39,11 @@ export function Home() {
     return (
         <div>
             <NavBarTraveler />
-            <h1 className="title">Bienvenue sur Paris Janitor</h1>
-            {user.user && (<div>
-                <ListeLogements />
-            </div>)}
+            <Routes>
+                <Route path={"/logement/*"} element={<ListeLogements />} />
+                <Route path={"/login"} element={<Login from="traveler"/>} />
+                <Route path={"/signup"} element={<SignUp from="traveler" />} />
+            </Routes>
         </div>
     )
 }

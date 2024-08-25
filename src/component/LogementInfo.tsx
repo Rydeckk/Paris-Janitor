@@ -148,18 +148,18 @@ export function LogementInfo({logement, onUpdate, onReturn}: LogementInfoProps) 
                                 <label>Prix de la nuit (en €)</label>
                                 <input disabled={!isEdition} value={prixNuit} onChange={(e) => setPrixNuit(+e.target.value)} required></input>
                             </div>
-                            <div className="div_info_value">
+                            {user.user?.role.isOwner && (<div className="div_info_value">
                                 <label>Statut</label>
                                 <input disabled={true} value={statutLogementString[logement.statut]}></input>
-                            </div>
+                            </div>)}
                         </div>
                     </div>
                 </div>
-                <div className="div_button_info_logement">
+                {user.user?.role.isOwner && (<div className="div_button_info_logement">
                     {!isEdition && (<button type="button" className="button" onClick={() => setIsEdition(true)}>Modifier</button>)}
                     {isEdition && (<button type="button" className="button_suppr" onClick={() => setIsEdition(false)}>Supprimer</button>)}
                     {isEdition && (<button type="submit" className="button">Enregistrer</button>)}
-                </div>
+                </div>)}
             </form>
             <PopupAddPhoto isOpen={isPopupOpen} onUpload={(photo) => handleAddPhoto(photo)} onClose={() => setIsPopupOpen(false)}/>
             <div className="div_return">

@@ -25,7 +25,7 @@ export function LogementDetail({logement, onUpdate, onReturn}: LogementDetailPro
                 <Route path={"/"} element={<LogementInfo logement={logement} onUpdate={(logement) => handleUpdate(logement)} onReturn={onReturn}/>} />
                 <Route path={"/calendrier"} element={<LogementCalendrier logement={logement} onUpdate={(logement) => handleUpdate(logement)} onReturn={onReturn}/>}/>
                 <Route path={"/service"} element={<LogementService logement={logement} onUpdate={(logement) => handleUpdate(logement)} onReturn={onReturn} space="owner"/>}/>
-                <Route path={"/reservation"} element={<LogementReservation logement={logement}/>}/>
+                <Route path={"/reservation"} element={<LogementReservation logement={logement} onUpdate={(logement) => handleUpdate(logement)} onReturn={onReturn}/>}/>
             </Routes>
         </div>
     )

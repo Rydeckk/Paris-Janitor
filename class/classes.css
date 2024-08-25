@@ -458,7 +458,7 @@ abbr[title] {
     text-decoration: none;
 }
 .react-calendar__month-view__days__day--weekend:enabled {
-    color: #222 !important;
+    color: #222;
 }
 .react-calendar__month-view__days__day--weekend:enabled:hover,
 .react-calendar__month-view__days__day--weekend:enabled:focus {
@@ -557,7 +557,6 @@ abbr[title] {
     border-bottom: solid 1px var(--couleur-principale);
     margin: 10px 0px;
     padding: 10px;
-    height: 100%;
 
     & div {
         width: 300px;
