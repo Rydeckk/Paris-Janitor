@@ -53,6 +53,7 @@ export class ServiceUseCase {
         const query = this.db.createQueryBuilder(Service,"service")
         query.where("service.id = :serviceId", {serviceId: id})
         query.leftJoinAndSelect("service.logements","logement")
+        query.leftJoinAndSelect("service.reservations", "reservation")
 
         const serviceFound = query.getOne()
         if(serviceFound === null) return null

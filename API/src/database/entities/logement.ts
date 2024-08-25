@@ -4,6 +4,7 @@ import { User } from "./user";
 import { Photo } from "./photo";
 import { Service } from "./service";
 import { DateIndisponible } from "./dateIndisponible";
+import { Reservation } from "./reservation";
 
 @Entity({name: "Logement"})
 export class Logement {
@@ -55,6 +56,9 @@ export class Logement {
     @OneToMany(() => DateIndisponible, dateIndisponible => dateIndisponible.logement)
     datesIndisponibles: DateIndisponible[] 
 
+    @OneToMany(() => Reservation, reservation => reservation.logement)
+    reservations: Reservation[]
+
     @ManyToOne(() => User, user => user.logements, {onDelete: 'CASCADE'})
     user: User
 
@@ -63,7 +67,7 @@ export class Logement {
     services: Service[]
 
     constructor(id: number, nom: string, adresse: string, ville: string, pays: string, codePostal: string, typeLogement: TypeBien, typeLocation: TypeLocation, nbChambres: number, capacite: number, 
-    surface: number,prixNuit: number, statut: StatutLogement, createdAt: Date, photos: Photo[], datesIndisponibles: DateIndisponible[], user: User, services: Service[]) {
+    surface: number,prixNuit: number, statut: StatutLogement, createdAt: Date, photos: Photo[], datesIndisponibles: DateIndisponible[], reservations: Reservation[], user: User, services: Service[]) {
         this.id = id,
         this.nom = nom,
         this.adresse = adresse,
@@ -80,6 +84,7 @@ export class Logement {
         this.createdAt = createdAt,
         this.photos = photos,
         this.datesIndisponibles = datesIndisponibles,
+        this.reservations = reservations,
         this.user = user,
         this.services = services
     }

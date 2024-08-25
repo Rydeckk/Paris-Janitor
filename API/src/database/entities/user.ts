@@ -3,6 +3,7 @@ import { Token } from "./token"
 import { Role } from "./role"
 import { Logement } from "./logement"
 import { Devis } from "./devis"
+import { Reservation } from "./reservation"
 
 @Entity()
 export class User {
@@ -39,7 +40,11 @@ export class User {
     @OneToMany(() => Devis, devis => devis.user)
     devis: Devis[]
 
-    constructor(id: number, email: string, password: string, firstName: string, lastName: string, phone: string, role: Role, createdAt: Date, tokens: Token[], logements: Logement[], devis: Devis[]) {
+    @OneToMany(() => Reservation, reservation => reservation.user)
+    reservations: Reservation[]
+
+    constructor(id: number, email: string, password: string, firstName: string, lastName: string, phone: string, role: Role
+        , createdAt: Date, tokens: Token[], logements: Logement[], devis: Devis[], reservations: Reservation[]) {
             this.id = id,
             this.email = email,
             this.password = password,
@@ -50,6 +55,7 @@ export class User {
             this.createdAt = createdAt,
             this.tokens = tokens,
             this.logements = logements,
-            this.devis = devis
+            this.devis = devis,
+            this.reservations = reservations
     }
 }

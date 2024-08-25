@@ -31,6 +31,7 @@ export class UserUseCase {
         query.take(listUserFilter.limit)
         query.innerJoinAndSelect('user.role','role')
         query.leftJoinAndSelect("user.devis", "devis")
+        query.leftJoinAndSelect("user.reservations", "reservation")
 
         if(listUserFilter.isAdmin !== undefined) {
             query.andWhere('role.isAdmin= :isAdmin', {isAdmin: listUserFilter.isAdmin})
@@ -50,6 +51,7 @@ export class UserUseCase {
         const query = this.db.createQueryBuilder(User, "user")
         query.innerJoinAndSelect("user.role","role")
         query.leftJoinAndSelect("user.devis", "devis")
+        query.leftJoinAndSelect("user.reservations", "reservation")
         query.where("user.id = :id", {id: id})
 
         const userFound = await query.getOne()
@@ -62,6 +64,7 @@ export class UserUseCase {
         const queryToken = this.db.createQueryBuilder(Token, 'token')
         queryToken.innerJoinAndSelect('token.user','user')
         queryToken.leftJoinAndSelect("user.devis", "devis")
+        queryToken.leftJoinAndSelect("user.reservations", "reservation")
         queryToken.where('token.token= token',{token: token})
         const tokenFound = await queryToken.getOne()
 
@@ -72,6 +75,7 @@ export class UserUseCase {
         const queryUser = this.db.createQueryBuilder(User, 'user')
         queryUser.innerJoinAndSelect('user.role','role')
         queryUser.leftJoinAndSelect("user.devis", "devis")
+        queryUser.leftJoinAndSelect("user.reservations", "reservation")
         queryUser.where('user.id= :userId',{userId: tokenFound.user.id})
 
         const user = await queryUser.getOne()
@@ -87,6 +91,7 @@ export class UserUseCase {
         const query = this.db.createQueryBuilder(User,"user")
         query.innerJoinAndSelect("user.role","role")
         query.leftJoinAndSelect("user.devis", "devis")
+        query.leftJoinAndSelect("user.reservations", "reservation")
         query.where("user.id = :userId", {userId: id})
 
         const userFound = await query.getOne()
@@ -113,6 +118,7 @@ export class UserUseCase {
         const query = this.db.createQueryBuilder(User,"user")
         query.innerJoinAndSelect("user.role","role")
         query.leftJoinAndSelect("user.devis", "devis")
+        query.leftJoinAndSelect("user.reservations", "reservation")
         query.where("user.id = :userId", {userId: id})
 
         const userFound = await query.getOne()
@@ -144,6 +150,7 @@ export class UserUseCase {
         const query = this.db.createQueryBuilder(User,"user")
         query.innerJoinAndSelect("user.role","role")
         query.leftJoinAndSelect("user.devis", "devis")
+        query.leftJoinAndSelect("user.reservations", "reservation")
         query.where("user.id = :userId", {userId: id})
 
         const userFound = await query.getOne()

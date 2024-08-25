@@ -27,7 +27,7 @@ export class LogementUseCase {
 
     async updateLogement(id: number, params: UpdateLogementParams): Promise<Logement | null> {
         const logementRepo = this.db.getRepository(Logement)
-        const logementFound = await logementRepo.findOne({where: {id: id}, relations: ["services","user","photos","datesIndisponibles"]})
+        const logementFound = await logementRepo.findOne({where: {id: id}, relations: ["services","user","photos","datesIndisponibles", "reservations"]})
         if (logementFound === null) return null
 
         if(params.nom) {
@@ -66,6 +66,7 @@ export class LogementUseCase {
         query.leftJoinAndSelect("logement.photos", "photos")
         query.leftJoinAndSelect("logement.services", "service")
         query.leftJoinAndSelect("logement.datesIndisponibles", "dates")
+        query.leftJoinAndSelect("logement.reservations", "reservation")
 
         if(filters.typeLogement !== undefined) {
             query.andWhere("logement.typeLogement = :typeLogement", {typeLogement: filters.typeLogement})
@@ -111,6 +112,7 @@ export class LogementUseCase {
         query.leftJoinAndSelect("logement.photos","photo")
         query.leftJoinAndSelect("logement.services","service")
         query.leftJoinAndSelect("logement.datesIndisponibles", "dates")
+        query.leftJoinAndSelect("logement.reservations", "reservation")
         query.where("logement.id = :logementId", {logementId: id})
 
         if(userId) {
