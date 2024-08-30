@@ -36,3 +36,14 @@ export async function signUp(signUpInfo: SignUpInfo) {
         return (await response.json()).error
     }
 } 
+
+export async function logout() {
+    const headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer '+ localStorage.getItem("token")})
+    const response = await fetch(import.meta.env.VITE_URL_API+"/auth/logout", {
+        
+        method: 'DELETE',
+        headers: headers
+      })
+
+      localStorage.removeItem('token')
+  }

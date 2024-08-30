@@ -1,10 +1,10 @@
 import { FormEvent, FormHTMLAttributes, useEffect, useState } from "react"
-import { login, signUp } from "../request/requestAuth"
+import { login, signUp } from "../../request/requestAuth"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useUserContext } from "../main"
-import { getUser } from "../request/requestUser"
-import { DevisData } from "../types/types"
-import { addServiceLogement, createLogement } from "../request/requestLogement"
+import { useUserContext } from "../../main"
+import { getUser } from "../../request/requestUser"
+import { DevisData } from "../../types/types"
+import { addServiceLogement, createLogement } from "../../request/requestLogement"
 
 interface SignUpProps {
     from: string

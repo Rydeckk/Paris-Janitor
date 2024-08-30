@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Logement, Service, TypeSpace } from "../types/types";
+import { Logement, Service, TypeSpace } from "../../types/types";
 import { ListeServices } from "./ListeServices";
 import { AddServiceLogement } from "./AddServiceLogement";
-import { addServiceLogement, removeServiceLogement } from "../request/requestLogement";
+import { addServiceLogement, removeServiceLogement } from "../../request/requestLogement";
 import { useNavigate } from "react-router-dom";
 
 interface LogementServiceProps {

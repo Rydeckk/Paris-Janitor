@@ -1,9 +1,9 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import { useUserContext } from "../main";
-import { uploadPhoto, deletePhoto } from "../request/requestPhoto";
-import { Logement, Photo, statutLogementString, TypeBien, typeBienString, TypeLocation, typeLocationString } from "../types/types";
+import { useUserContext } from "../../main";
+import { uploadPhoto, deletePhoto } from "../../request/requestPhoto";
+import { Logement, Photo, StatutLogement, statutLogementString, TypeBien, typeBienString, TypeLocation, typeLocationString } from "../../types/types";
 import { PopupAddPhoto } from "./PopupAddPhoto";
-import { getLogement, updateLogement } from "../request/requestLogement";
+import { getLogement, updateLogement, updateStatutLogement } from "../../request/requestLogement";
 import { useLocation } from "react-router-dom";
 
 interface LogementInfoProps {
@@ -78,6 +78,13 @@ export function LogementInfo({logement, onUpdate, onReturn}: LogementInfoProps) 
         setIsEdition(false)
     }
 
+    const handleUpdateStatut = async (statut: StatutLogement) => {
+        const logementUpdated = await updateStatutLogement(logement.id,statut)
+        if(logementUpdated) {
+            onUpdate({...logement,statut: logementUpdated.statut})
+        }
+    }
+
     return (
         <div>
             <form className="div_detail" onSubmit={(e) => handleSubmit(e)}>
@@ -150,15 +157,17 @@ export function LogementInfo({logement, onUpdate, onReturn}: LogementInfoProps) 
                             </div>
                             {user.user?.role.isOwner && (<div className="div_info_value">
                                 <label>Statut</label>
-                                <input disabled={true} value={statutLogementString[logement.statut]}></input>
+                                <input disabled={true} value={logement.isActif ? statutLogementString[logement.statut] : "Inactif"}></input>
                             </div>)}
                         </div>
                     </div>
                 </div>
                 {user.user?.role.isOwner && (<div className="div_button_info_logement">
-                    {!isEdition && (<button type="button" className="button" onClick={() => setIsEdition(true)}>Modifier</button>)}
-                    {isEdition && (<button type="button" className="button_suppr" onClick={() => setIsEdition(false)}>Supprimer</button>)}
+                    {!isEdition && !user.user.role.isAdmin && (<button type="button" className="button" onClick={() => setIsEdition(true)}>Modifier</button>)}
+                    {(isEdition || user.user.role.isAdmin) && (<button type="button" className="button_suppr" onClick={() => setIsEdition(false)}>Supprimer</button>)}
                     {isEdition && (<button type="submit" className="button">Enregistrer</button>)}
+                    {user.user.role.isAdmin && logement.statut === "attenteValidation" && (<button type="button" className="button" onClick={() => handleUpdateStatut("valide")}>Valider</button>)}
+                    {user.user.role.isAdmin && logement.statut === "attenteValidation" && (<button type="button" className="button" onClick={() => handleUpdateStatut("refuse")}>Refuser</button>)}
                 </div>)}
             </form>
             <PopupAddPhoto isOpen={isPopupOpen} onUpload={(photo) => handleAddPhoto(photo)} onClose={() => setIsPopupOpen(false)}/>

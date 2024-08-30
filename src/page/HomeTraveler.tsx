@@ -1,9 +1,8 @@
 import { useEffect } from "react";
-import { NavBarOwner } from "../component/NavbarHome/NavBarOwner";
 import { useUserContext } from "../main";
 import { useNavigate } from "react-router-dom";
 
-export function HomeOwner() {
+export function HomeTraveler() {
     const user = useUserContext()
     const navigate = useNavigate()
 
@@ -16,7 +15,7 @@ export function HomeOwner() {
     return (
         <div className="div_welcome">
             <div>
-                <label>Commencez dès maintenant simplement en demandant un devis !</label>
+                <label>Réservez dès maintenant vos services en vous authentifiant !</label>
             </div>
         </div>
     )

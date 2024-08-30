@@ -84,3 +84,17 @@ export async function removeServiceReservation(reservationId: number, serviceId:
     const data = await response.json()
     return data
 } 
+
+export async function payeReservation(montant: number) {
+    const url = new URL(import.meta.env.VITE_URL_API+"/reservation/paye")
+    const headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer '+ localStorage.getItem("token")})
+    const response = await fetch(url.toString(), {
+        
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify({montant})
+    })
+
+    const data = await response.json()
+    return data
+} 

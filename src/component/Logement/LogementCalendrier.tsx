@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Logement } from "../types/types"
+import { Logement } from "../../types/types"
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { getDatesInRange, isSameDate } from "../utils/utils-function";
-import { useUserContext } from "../main";
-import { createDateIndisponible } from "../request/requestDateIndisponible";
-import { getLogement } from "../request/requestLogement";
+import { getDatesInRange, isSameDate } from "../../utils/utils-function";
+import { useUserContext } from "../../main";
+import { createDateIndisponible } from "../../request/requestDateIndisponible";
+import { getLogement } from "../../request/requestLogement";
 import { useNavigate } from "react-router-dom";
 
 interface LogementCalendrierProps {
@@ -111,9 +111,9 @@ export function LogementCalendrier({logement, onReturn, onUpdate}: LogementCalen
                     <Calendar locale="fr" onChange={(value) => handleDateChange(value as [Date, Date] | Date | null)} value={date} selectRange={true} minDate={new Date()} maxDate={datePlus5ans} tileDisabled={tileDesactive}/>
                 </div>
                 <div className="div_end">
-                    {user.user?.role.isOwner && (<button disabled={date === null} className="button" onClick={handleDisableDates}>Bloquer</button>)}
-                    {user.user?.role.isOwner && (<button disabled={datesDesactiveTmp.length === 0} className="button" onClick={handleSaveDisabledDates}>Enregistrer</button>)}
-                    {user.user?.role.isOwner && (<button disabled={datesDesactiveTmp.length === 0} className="button" onClick={handleCancelDisabledDates}>Annuler</button>)}
+                    {user.user?.role.isOwner && !user.user.role.isAdmin  && (<button disabled={date === null} className="button" onClick={handleDisableDates}>Bloquer</button>)}
+                    {user.user?.role.isOwner && !user.user.role.isAdmin  && (<button disabled={datesDesactiveTmp.length === 0} className="button" onClick={handleSaveDisabledDates}>Enregistrer</button>)}
+                    {user.user?.role.isOwner && !user.user.role.isAdmin && (<button disabled={datesDesactiveTmp.length === 0} className="button" onClick={handleCancelDisabledDates}>Annuler</button>)}
                     {!user.user?.role.isOwner && (<button disabled={date === null} className="button" onClick={() => handleSaveDatesReservation()}>Réserver</button>)}
                 </div>
             </div>

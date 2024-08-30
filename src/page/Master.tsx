@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { NavBarAdmin } from "../component/NavBarAdmin";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { NavBarAdmin } from "../component/NavbarHome/NavBarAdmin";
 import { useUserContext } from "../main";
 import { spaceColors, TypeUser } from "../types/types";
 import { getTypeUser } from "../utils/utils-function";
+import { HomeAdmin } from "./HomeAdmin";
+import { ListeServicesDisponible } from "../component/Service/ListeServicesDisponible";
+import { ListeLogements } from "../component/Logement/ListeLogements";
+import { Login } from "../component/Auth/Login";
 
 export function Master() {
     const [typeCompte, setTypeCompte] = useState<TypeUser>("admin")
@@ -13,6 +17,10 @@ export function Master() {
     useEffect(() => {
         if(user.user) {
             setTypeCompte(getTypeUser(user.user))
+        } 
+
+        if(!localStorage.getItem("token")) {
+            navigate("/master/login")
         }
     }, [user.user])
 
@@ -31,6 +39,14 @@ export function Master() {
     return (
         <div>
             <NavBarAdmin />
+            <Routes>
+                <Route path="/" element={<HomeAdmin />}/>
+                <Route path="/logement/*" element={<ListeLogements />} />
+                <Route path="/service/*" element={<ListeServicesDisponible />}/>
+                <Route path="/user/*"/>
+                <Route path="/abonnement"/>
+                <Route path="/login" element={<Login from="admin" />}/>
+            </Routes>
         </div>
     )
 }

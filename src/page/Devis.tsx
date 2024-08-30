@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { DevisForm } from "../component/DevisForm";
+import { DevisForm } from "../component/Document/DevisForm";
 import { DevisData } from "../types/types";
-import { DevisResult } from "../component/DevisResult";
+import { DevisResult } from "../component/Document/DevisResult";
 
 export function Devis() {
     const [devisData, setDevisData] = useState<DevisData>()

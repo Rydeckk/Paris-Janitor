@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Logement, Service, TypeSpace } from "../types/types";
-import { useUserContext } from "../main";
-import { getListService, getListServiceOwner } from "../request/requestService";
-import { addServiceLogement } from "../request/requestLogement";
+import { Logement, Service, TypeSpace } from "../../types/types";
+import { useUserContext } from "../../main";
+import { getListService, getListServiceOwner } from "../../request/requestService";
+import { addServiceLogement } from "../../request/requestLogement";
 
 interface AddServiceLogementProps {
     servicesActif: Service[]

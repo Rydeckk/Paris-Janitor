@@ -125,3 +125,17 @@ export async function getLogement(logementId: number): Promise <Logement | null>
     const data = await response.json()
     return data
 }
+
+export async function updateStatutLogement(id: number, statut: StatutLogement): Promise <Logement | null> {
+    const url = new URL(import.meta.env.VITE_URL_API+"/logement/"+id+"/statut")
+    const headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer '+ localStorage.getItem("token")})
+    const response = await fetch(url.toString(), {
+        
+    method: 'PATCH',
+    headers: headers,
+    body: JSON.stringify({statut: statut})
+    })
+
+    const data = await response.json()
+    return data
+}

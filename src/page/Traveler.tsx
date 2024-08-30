@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { ListeLogements } from "../component/ListeLogements";
-import { NavBarTraveler } from "../component/NavBarTraveler";
+import { ListeLogements } from "../component/Logement/ListeLogements";
+import { NavBarTraveler } from "../component/NavbarHome/NavBarTraveler";
 import { useUserContext } from "../main";
 import { spaceColors, TypeUser } from "../types/types";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { getTypeUser } from "../utils/utils-function";
-import { Login } from "../component/Login";
-import { SignUp } from "../component/SignUp";
+import { Login } from "../component/Auth/Login";
+import { SignUp } from "../component/Auth/SignUp";
+import { HomeTraveler } from "./HomeTraveler";
+import { ListeReservation } from "../component/Logement/ListeReservation";
+import { ListeServicesDisponible } from "../component/Service/ListeServicesDisponible";
 
 export function Home() {
     const [typeCompte, setTypeCompte] = useState<TypeUser>("traveler")
@@ -32,15 +35,15 @@ export function Home() {
         
     }, [typeCompte])
 
-    const handleClick = () => {
-
-    }
 
     return (
         <div>
             <NavBarTraveler />
             <Routes>
+                <Route path={"/"} element={<HomeTraveler />} />
+                <Route path={"/service"} element={<ListeServicesDisponible/>}/>
                 <Route path={"/logement/*"} element={<ListeLogements />} />
+                <Route path={"/reservation"} element={<ListeReservation />} />
                 <Route path={"/login"} element={<Login from="traveler"/>} />
                 <Route path={"/signup"} element={<SignUp from="traveler" />} />
             </Routes>

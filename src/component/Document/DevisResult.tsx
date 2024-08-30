@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Devis, DevisData, typeBienString, typeLocationString } from "../types/types";
-import { useUserContext } from "../main";
+import { Devis, DevisData, typeBienString, typeLocationString } from "../../types/types";
+import { useUserContext } from "../../main";
 import { useNavigate } from "react-router-dom";
-import { createLogement, addServiceLogement } from "../request/requestLogement";
-import { sendMailDevis } from "../request/requestMail";
-import { createDevis, createDevisNonConnecte } from "../request/requestDevis";
+import { createLogement, addServiceLogement } from "../../request/requestLogement";
+import { sendMailDevis } from "../../request/requestMail";
+import { createDevis, createDevisNonConnecte } from "../../request/requestDevis";
 
 interface DevisResultProps {
     devisData: DevisData

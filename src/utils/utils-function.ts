@@ -78,10 +78,26 @@ export function getDatesInRange (startDate: Date, endDate: Date): Date[] {
 }
 
 export function differenceEnJours(date1: Date, date2: Date): number {
+    const newDate1 = new Date(date1)
+    const newDate2 = new Date(date2)
     const millisecondesParJour = 1000 * 60 * 60 * 24 // Nombre de millisecondes dans une journée
-    const diffInMs = Math.abs(date2.getTime() - date1.getTime())
+    const diffInMs = Math.abs(newDate2.getTime() - newDate1.getTime())
     if(diffInMs < 0) {
-        return Math.floor((Math.abs(date1.getTime() - date2.getTime())) / millisecondesParJour)
+        return Math.floor((Math.abs(newDate1.getTime() - newDate2.getTime())) / millisecondesParJour)
     }
     return Math.floor(diffInMs / millisecondesParJour)
+}
+
+export function getStatutSouscription(dateDebut: Date, dateFin: Date): string {
+    const newDateDebut = new Date(dateDebut)
+    const newDateFin = new Date(dateFin)
+    const today = new Date()
+
+    if(today > newDateFin) {
+        return "Terminé"
+    } else if (today <= newDateFin && today >= newDateDebut) {
+        return "En cours"
+    } else {
+        return "Pas encore commencé"
+    }
 }

@@ -12,6 +12,7 @@ export type Logement = {
     surface: number
     prixNuit: number
     statut: StatutLogement
+    isActif: boolean
     createdAt: Date
     photos: Photo[]
     datesIndisponibles: DateIndisponible[]
@@ -57,6 +58,12 @@ export type Service = {
     prix: number
     logements: Logement[]
     reservations: Reservation[]
+}
+
+export type ServiceCreate = {
+    nom: string
+    type: TypeService
+    prix: number
 }
 
 export type Role = {
@@ -135,24 +142,56 @@ export type Devis = {
 export type CreateReservation = {
     dateDebut: Date,
     dateFin: Date,
-    montant: number
+    montant: number,
+    services: Service[]
 }
 
 export type Reservation = {
     id: number, 
     dateDebut: Date, 
     dateFin: Date,
-    montant: number, 
+    montant: number,
+    dateCreation: Date, 
     user: UserInfoWithId, 
     logement: Logement, 
-    services: Service[]
+    services: Service[],
+    facture: Facture
+}
+
+export type Facture = {
+    id: number,
+    nomFacture: string,
+    numeroFacture: string,
+    nomPersonne: string,
+    prenom: string,
+    montant: number,
+    dateCreation: Date,
+    user: UserInfoWithId,
+    reservation: Reservation
+    souscription: Souscription
+}
+
+export type Abonnement = {
+    id: number,
+    nom: string,
+    montant: number,
+    souscriptions: Souscription[]
+}
+
+export type Souscription = {
+    id: number,
+    dateDebut: Date,
+    dateFin: Date,
+    user: UserInfoWithId,
+    abonnement: Abonnement,
+    facture: Facture
 }
 
 export type TypeUser = "traveler" | "owner" | "admin"
 
 export type TypeSpace = "traveler" | "owner" | "admin"
 
-export type StatutLogement = "attenteValidation" | "valide" | "refuse" | "inactif"
+export type StatutLogement = "attenteValidation" | "valide" | "refuse"
 
 export type TypeBien = "maison" | "appartement"
 
@@ -163,21 +202,19 @@ export type TypeService = "traveler" | "owner"
 export const spaceColors: Record<TypeSpace, string> = {
     traveler: '#bda34d', 
     owner: '#519164', 
-    admin: '#2196F3' 
+    admin: '#584bd1' 
 }
 
 export const statutColors: Record<StatutLogement,string> = {
     attenteValidation: "rgba(201, 179, 57, 0.2)",
     valide: "rgba(57, 201, 100, 0.2)",
-    refuse: "rgba(161, 73, 67, 0.2)",
-    inactif: "rgba(0, 0, 0, 0.2)"
+    refuse: "rgba(161, 73, 67, 0.2)"
 }
 
 export const statutLogementString: Record<StatutLogement, string> = {
     attenteValidation: "En attente",
     valide: "Validé",
-    refuse: "Refusé",
-    inactif: "Inactif"
+    refuse: "Refusé"
 }
 
 export const typeLocationString: Record<TypeLocation, string> = {
@@ -188,6 +225,11 @@ export const typeLocationString: Record<TypeLocation, string> = {
 export const typeBienString: Record<TypeBien, string> = {
     maison: "Maison",
     appartement: "Appartement"
+}
+
+export const typeServiceString: Record<TypeService, string> = {
+    traveler: "Voyageur",
+    owner: "Bailleur"
 }
 
 export type country = {

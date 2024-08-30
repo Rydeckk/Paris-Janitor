@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Service } from "../types/types";
-import { useUserContext } from "../main";
+import { Service } from "../../types/types";
+import { useUserContext } from "../../main";
 
 interface ListeServiceProps {
     services?: Service[]
@@ -19,13 +19,11 @@ export function ListeServices({services, onClickAdd, onDelete}: ListeServiceProp
             </div>)}
             
             {services && services.length > 0 ? services.map((service) => (
-                <div key={service.id} className="div_liste">
-                    <div className="div_row">
-                        {onDelete && (<button className="button_delete" onClick={() => onDelete(service)}>X</button>)}
-                        <label className="label_info">{service.nom}</label>
-                        <label className="label_info" style={{fontWeight: "bold"}}>{service.prix} €</label>
-                    </div>
-                </div>    
+                <div key={service.id} className="div_row">
+                    {onDelete && (<button className="button_delete" onClick={() => onDelete(service)}>X</button>)}
+                    <label className="label_info" style={{color: "black"}}>{service.nom}</label>
+                    <label className="label_info" style={{fontWeight: "bold", color: "black"}}>{service.prix} €</label>
+                </div>   
             )): (
                 user.user?.role.isOwner ? (<label>Aucun services pour ce logement</label>)
                 : (<label>Aucun services additionnel</label>)
