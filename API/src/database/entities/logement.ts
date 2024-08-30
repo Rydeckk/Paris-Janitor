@@ -47,27 +47,30 @@ export class Logement {
     @Column({default: "attenteValidation"})
     statut: StatutLogement
 
+    @Column({default: true})
+    isActif: boolean
+
     @CreateDateColumn({type: "datetime"})
     createdAt: Date
 
-    @OneToMany(() => Photo, photo => photo.logement)
+    @OneToMany(() => Photo, photo => photo.logement, {onDelete: 'CASCADE'})
     photos: Photo[]
 
-    @OneToMany(() => DateIndisponible, dateIndisponible => dateIndisponible.logement)
+    @OneToMany(() => DateIndisponible, dateIndisponible => dateIndisponible.logement, {onDelete: 'CASCADE'})
     datesIndisponibles: DateIndisponible[] 
 
-    @OneToMany(() => Reservation, reservation => reservation.logement)
+    @OneToMany(() => Reservation, reservation => reservation.logement, {onDelete: 'CASCADE'})
     reservations: Reservation[]
 
-    @ManyToOne(() => User, user => user.logements, {onDelete: 'CASCADE'})
+    @ManyToOne(() => User, user => user.logements)
     user: User
 
-    @ManyToMany(() => Service, service => service.logements)
+    @ManyToMany(() => Service, service => service.logements, {onDelete: 'CASCADE'})
     @JoinTable({name: "ServiceLogement"})
     services: Service[]
 
     constructor(id: number, nom: string, adresse: string, ville: string, pays: string, codePostal: string, typeLogement: TypeBien, typeLocation: TypeLocation, nbChambres: number, capacite: number, 
-    surface: number,prixNuit: number, statut: StatutLogement, createdAt: Date, photos: Photo[], datesIndisponibles: DateIndisponible[], reservations: Reservation[], user: User, services: Service[]) {
+    surface: number,prixNuit: number, statut: StatutLogement, isActif: boolean, createdAt: Date, photos: Photo[], datesIndisponibles: DateIndisponible[], reservations: Reservation[], user: User, services: Service[]) {
         this.id = id,
         this.nom = nom,
         this.adresse = adresse,
@@ -81,6 +84,7 @@ export class Logement {
         this.surface = surface,
         this.prixNuit = prixNuit,
         this.statut = statut,
+        this.isActif = isActif,
         this.createdAt = createdAt,
         this.photos = photos,
         this.datesIndisponibles = datesIndisponibles,

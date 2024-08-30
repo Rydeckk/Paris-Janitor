@@ -11,3 +11,11 @@ export const sendMailDevisValidation = Joi.object<SendMailDevis>({
     devisId: Joi.number().min(1).required(),
     email: Joi.string().required()
 })
+
+interface SendMailFacture {
+    factureId: number
+}
+
+export const sendMailFactureValidation = Joi.object<SendMailFacture>({
+    factureId: Joi.number().min(1).required()
+})

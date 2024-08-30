@@ -3,6 +3,7 @@ import { initRoutes } from "./handlers/routes";
 import { AppDataSource } from "./database/database";
 import cors from "cors"
 import path from "path"
+import { scheduleTask } from "./cron/cron";
 
 
 
@@ -17,13 +18,12 @@ const main = async () => {
         credentials: true,
     }
 
-    app.use(cors(corsOptions))
+    app.use(cors())
 
     try {
 
         await AppDataSource.initialize()
-
-        console.error("well connected to database")
+        scheduleTask()
     } catch (error) {
         console.log(error)
         console.error("Cannot contact database")

@@ -7,6 +7,10 @@ import { ServiceHandler } from "./routes_services"
 import { MailHandler } from "./routes_mail"
 import { DevisHandler } from "./routes_devis"
 import { ReservationHandler } from "./routes_reservation"
+import { PayeHandler } from "./routes_paye"
+import { FactureHandler } from "./routes_facture"
+import { AbonnementHandler } from "./routes_abonnement"
+import { SouscriptionHandler } from "./routes_souscription"
 
 export const initRoutes = (app: express.Express) => {
 
@@ -18,4 +22,8 @@ export const initRoutes = (app: express.Express) => {
     MailHandler(app)
     DevisHandler(app)
     ReservationHandler(app)
+    PayeHandler(app)
+    FactureHandler(app)
+    AbonnementHandler(app)
+    SouscriptionHandler(app)
 }

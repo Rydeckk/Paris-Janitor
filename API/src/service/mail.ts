@@ -40,3 +40,17 @@ export const bodyMailDevis = (nom: string, prenom: string): string => {
         + "\n\nNous espérons vous revoir très rapidement sur notre plateforme !"
         + "\n\nCordialement"
 }
+
+export const bodyMailFactureReservation = (): string => {
+    return "Merci pour votre réservation !"
+    + "\n\nVous pouvez retrouver votre facture en pièce jointe qui contient tous les détails de votre réservation."
+    + "\n\nEn espérant que vous passerez un agréable séjour !"
+    + "\n\nCordialement"
+}
+
+export const bodyMailFacture = (): string => {
+    return "Merci pour votre achat !"
+    + "\n\nVous pouvez retrouver votre facture en pièce jointe qui contient tous les détails de votre achat."
+    + "\n\nEn espérant que nos services vous plaisent !"
+    + "\n\nCordialement"
+}

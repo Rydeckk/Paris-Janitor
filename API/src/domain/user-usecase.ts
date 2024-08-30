@@ -32,6 +32,8 @@ export class UserUseCase {
         query.innerJoinAndSelect('user.role','role')
         query.leftJoinAndSelect("user.devis", "devis")
         query.leftJoinAndSelect("user.reservations", "reservation")
+        query.leftJoinAndSelect("user.logements","logements")
+        query.leftJoinAndSelect("user.souscriptions","souscriptions")
 
         if(listUserFilter.isAdmin !== undefined) {
             query.andWhere('role.isAdmin= :isAdmin', {isAdmin: listUserFilter.isAdmin})

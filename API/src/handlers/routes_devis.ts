@@ -113,15 +113,6 @@ export const DevisHandler = (app: express.Express) => {
     })
 
     app.get("/myDevis", authMiddlewareOwner, async (req: Request, res: Response) => {
-        const validation = listDevisValidation.validate(req.query)
-
-        if(validation.error) {
-            res.status(400).send(generateValidationErrorMessage(validation.error.details))
-            return
-        }
-
-        const listDevisRequest = validation.value
-
         const userId = +req.user.userId
         const userFound = await getConnectedUser(userId, AppDataSource)
 

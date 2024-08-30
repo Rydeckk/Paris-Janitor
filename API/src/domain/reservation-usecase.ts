@@ -22,7 +22,9 @@ export class ReservationUseCase {
         const query = this.db.createQueryBuilder(Reservation, 'reservation')
         query.innerJoinAndSelect("reservation.user","user")
         query.innerJoinAndSelect("reservation.logement", "logement")
+        query.innerJoinAndSelect("reservation.facture", "facture")
         query.leftJoinAndSelect("reservation.services", "service")
+        query.addOrderBy("reservation.dateCreation", "DESC")
 
         if(filters.logementId !== undefined) {
             query.andWhere("logement.id = :logementId", {logementId: filters.logementId})
@@ -41,7 +43,8 @@ export class ReservationUseCase {
     async getReservation(id: number, userId?: number): Promise <Reservation | null> {
         const query = this.db.createQueryBuilder(Reservation,"reservation")
         query.innerJoinAndSelect("reservation.user","user")
-        query.leftJoinAndSelect("reservation.logement","photo")
+        query.innerJoinAndSelect("reservation.facture", "facture")
+        query.innerJoinAndSelect("reservation.logement","logement")
         query.leftJoinAndSelect("reservation.services","service")
         query.where("reservation.id = :reservationId", {reservationId: id})
 

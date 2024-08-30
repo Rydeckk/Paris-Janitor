@@ -2,7 +2,7 @@ import { Service } from "../database/entities/service"
 
 export type TypeUser = "traveler" | "owner" | "admin"
 
-export type StatutLogement = "attenteValidation" | "valide" | "refuse" | "inactif"
+export type StatutLogement = "attenteValidation" | "valide" | "refuse"
 
 export type TypeBien = "maison" | "appartement"
 

@@ -74,7 +74,7 @@ export const getListLogementValidation = Joi.object<GetListLogementRequest>({
     capacite: Joi.number().min(1).optional(),
     surface: Joi.number().min(9).optional(),
     prixNuit: Joi.number().min(1).optional(),
-    statut: Joi.string().valid("attenteValidation","valide","refuse","inactif").optional()
+    statut: Joi.string().valid("attenteValidation","valide","refuse").optional()
 })
 
 interface UpdateStatutLogement {
@@ -84,7 +84,7 @@ interface UpdateStatutLogement {
 
 export const updateStatutLogementValidation = Joi.object<UpdateStatutLogement>({
     id: Joi.number().min(1).required(),
-    statut: Joi.string().valid("attenteValidation","refuse","valide","inactif").required()
+    statut: Joi.string().valid("attenteValidation","refuse","valide").required()
 })
 
 interface ServiceLogement {

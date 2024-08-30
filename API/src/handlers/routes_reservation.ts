@@ -4,12 +4,15 @@ import { authMiddleware, authMiddlewareAdmin, authMiddlewareOwner } from "./midd
 import { AppDataSource } from "../database/database"
 import { getConnectedUser } from "../domain/user-usecase"
 import { generateValidationErrorMessage } from "./validators/generate-validation-messages"
-import { createReservationValidation, deleteReservationValidation, getListReservationValidation, serviceReservationValidation } from "./validators/reservation-validator"
+import { createReservationValidation, deleteReservationValidation, getListReservationValidation, payeReservationValidation, serviceReservationValidation } from "./validators/reservation-validator"
 import { LogementUseCase } from "../domain/logement-usecase"
 import { Reservation } from "../database/entities/reservation"
 import { ReservationUseCase } from "../domain/reservation-usecase"
 import { Logement } from "../database/entities/logement"
 import { Service } from "../database/entities/service"
+import { generatePdfFactureReservation } from "../service/pdf"
+import { Facture } from "../database/entities/facture"
+const stripe = require('stripe')(process.env.API_KEY_STRIPE);
 
 export const ReservationHandler = (app: express.Express) => { 
     app.post("/logement/:logementId/reservation", authMiddleware, async (req: Request, res: Response) => {
@@ -40,7 +43,33 @@ export const ReservationHandler = (app: express.Express) => {
 
         try {
             const reservationCreated = await AppDataSource.getRepository(Reservation).save({...createReservationRequest, logement: logementFound, user: userFound})
-            res.status(200).send(reservationCreated)
+
+            const reservationFound = await AppDataSource.getRepository(Reservation).findOne({where: {id: reservationCreated.id}, relations: ["user","logement","services","logement.services"]})
+            if(!reservationFound) {
+                return
+            }
+            const today = new Date()
+
+            const facturePath = generatePdfFactureReservation(reservationFound, today.getTime(), createReservationRequest.services)
+            const pathSplit = facturePath.split("/")
+            const namePdf = pathSplit[pathSplit.length - 1]
+
+            const factureCreated = await AppDataSource.getRepository(Facture).save({
+                nomFacture: namePdf,
+                numeroFacture: String(today.getTime()),
+                nomPersonne: userFound.lastName,
+                prenom: userFound.firstName,
+                montant: reservationCreated.montant,
+                user: userFound,
+                reservation: reservationCreated
+            })
+
+            const reservationFoundWithFacture = await AppDataSource.getRepository(Reservation).findOne({where: {id: reservationCreated.id}, relations: ["user","logement","services","logement.services","facture"]})
+            if(!reservationFound) {
+                return
+            }
+
+            res.status(200).send(reservationFoundWithFacture)
         }catch(error) {
             console.log(error)
             res.status(500).send({error: "Internal error"})
@@ -120,8 +149,11 @@ export const ReservationHandler = (app: express.Express) => {
         let logementFound: Logement | null = null
         if(listReservationRequest.logementId) {
             const logementUseCase = new LogementUseCase(AppDataSource)
-            logementFound = await logementUseCase.getLogement(listReservationRequest.logementId, userFound.id)
-    
+            if(userFound.role.isAdmin) {
+                logementFound = await logementUseCase.getLogement(listReservationRequest.logementId)
+            } else {
+                logementFound = await logementUseCase.getLogement(listReservationRequest.logementId, userFound.id)
+            }
         }
         
         if (!logementFound) {
@@ -253,5 +285,25 @@ export const ReservationHandler = (app: express.Express) => {
             res.status(500).send({error: "Internal error"})
         }
     })
+
+    app.post('/reservation/paye', authMiddleware, async (req: Request, res: Response) => {
+        const validation = payeReservationValidation.validate(req.body)
+
+        if(validation.error) {
+            res.status(400).send(generateValidationErrorMessage(validation.error.details))
+            return
+        }
+
+        const payeReservationRequest = validation.value
+
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: payeReservationRequest.montant,
+            currency: 'eur',
+        })
+      
+        res.send({
+            clientSecret: paymentIntent.client_secret,    
+          });
+      });
 }
 
