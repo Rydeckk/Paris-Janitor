@@ -6,6 +6,8 @@ import { Devis } from "./devis"
 import { Reservation } from "./reservation"
 import { Facture } from "./facture"
 import { Souscription } from "./souscription"
+import { Bannissement } from "./bannissement"
+import { Operation } from "./operation"
 
 @Entity()
 export class User {
@@ -51,8 +53,15 @@ export class User {
     @OneToMany(() => Souscription, souscription => souscription.user)
     souscriptions: Souscription[]
 
+    @OneToMany(() => Bannissement, banni => banni.user)
+    bannissements: Bannissement[]
+
+    @OneToMany(() => Operation, operation => operation.user)
+    operations: Operation[]
+
     constructor(id: number, email: string, password: string, firstName: string, lastName: string, phone: string, role: Role
-        , createdAt: Date, tokens: Token[], logements: Logement[], devis: Devis[], factures: Facture[], reservations: Reservation[], souscriptions: Souscription[]) {
+        , createdAt: Date, tokens: Token[], logements: Logement[], devis: Devis[], factures: Facture[], reservations: Reservation[]
+        , souscriptions: Souscription[], bannissements: Bannissement[], operations: Operation[]) {
             this.id = id,
             this.email = email,
             this.password = password,
@@ -66,6 +75,8 @@ export class User {
             this.devis = devis,
             this.factures = factures,
             this.reservations = reservations,
-            this.souscriptions = souscriptions
+            this.souscriptions = souscriptions,
+            this.bannissements = bannissements,
+            this.operations = operations
     }
 }

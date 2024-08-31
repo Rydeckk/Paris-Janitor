@@ -11,6 +11,8 @@ import { PayeHandler } from "./routes_paye"
 import { FactureHandler } from "./routes_facture"
 import { AbonnementHandler } from "./routes_abonnement"
 import { SouscriptionHandler } from "./routes_souscription"
+import { BannissementHandler } from "./routes_bannissement"
+import { OperationHandler } from "./routes_operation"
 
 export const initRoutes = (app: express.Express) => {
 
@@ -26,4 +28,6 @@ export const initRoutes = (app: express.Express) => {
     FactureHandler(app)
     AbonnementHandler(app)
     SouscriptionHandler(app)
+    BannissementHandler(app)
+    OperationHandler(app)
 }

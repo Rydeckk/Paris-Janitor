@@ -11,6 +11,9 @@ export class Souscription {
     @PrimaryGeneratedColumn()
     id: number
 
+    @Column({type: "decimal", precision: 10, scale: 2})
+    montant: number
+
     @Column({type: "date"})
     dateDebut: Date
 
@@ -27,8 +30,9 @@ export class Souscription {
     @JoinColumn()
     facture: Facture
 
-    constructor(id: number, dateDebut: Date, dateFin: Date, user: User,abonnement: Abonnement, facture: Facture) {
+    constructor(id: number, montant: number, dateDebut: Date, dateFin: Date, user: User,abonnement: Abonnement, facture: Facture) {
         this.id = id,
+        this.montant = montant,
         this.dateDebut = dateDebut,
         this.dateFin = dateFin,
         this.user = user,

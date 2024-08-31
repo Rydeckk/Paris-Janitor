@@ -10,6 +10,9 @@ import { Role } from "../database/entities/role";
 import { authMiddleware, authMiddlewareAdmin } from "./middleware/auth_middleware";
 import { Request } from "../types/express"
 import { getConnectedUser, UserUseCase } from "../domain/user-usecase";
+import { createBannissementValidation, updateBannissementValidation } from "./validators/bannissement-validator";
+import { Bannissement } from "../database/entities/bannissement";
+import { BannissementUseCase } from "../domain/bannissement-usecase";
 
 export const UserHandler = (app: express.Express) => {
     app.post('/auth/signup', async (req: Request, res: Response) => {
@@ -90,6 +93,14 @@ export const UserHandler = (app: express.Express) => {
             const isValid = await compare(loginUserRequest.password, user.password);
             if (!isValid) {
                 res.status(400).send({ error: "Email ou mot de passe non valide" })
+                return
+            }
+
+            const banniUseCase = new BannissementUseCase(AppDataSource)
+            const bannissement = await banniUseCase.getActualBannissement(user.id)
+
+            if(bannissement) {
+                res.status(400).send({ error: "Vous êtes banni" })
                 return
             }
             
@@ -242,6 +253,68 @@ export const UserHandler = (app: express.Express) => {
                 res.status(404).send({"error": `User ${updateUserRequest.id} not found`})
                 return
             }
+            res.status(200).send(selectedUser)
+        }catch(error) {
+            console.log(error)
+            res.status(500).send({error: "Internal error"})
+        }
+    })
+
+    app.post("/user/:id/bannissement", authMiddlewareAdmin, async (req: Request, res: Response) => {
+        const validation = createBannissementValidation.validate({...req.params, ...req.body})
+
+        if(validation.error) {
+            res.status(400).send(generateValidationErrorMessage(validation.error.details))
+            return
+        }
+
+        const createBanni = validation.value
+
+        try {
+            const userUseCase = new UserUseCase(AppDataSource)
+            const selectedUser = await userUseCase.getUser(createBanni.id)
+            if (selectedUser === null) {
+                res.status(404).send({"error": `User ${createBanni.id} not found`})
+                return
+            }
+
+            const bannissementCreated = await AppDataSource.getRepository(Bannissement).save({
+                motif: createBanni.motif,
+                dateDebut: createBanni.dateDebut,
+                dateFin: createBanni.dateFin,
+                user: selectedUser
+            })
+
+            res.status(200).send(selectedUser)
+        }catch(error) {
+            console.log(error)
+            res.status(500).send({error: "Internal error"})
+        }
+    })
+
+    app.patch("/user/:id/bannissement/:bannissementId", authMiddlewareAdmin, async (req: Request, res: Response) => {
+        const validation = updateBannissementValidation.validate({...req.params, ...req.body})
+
+        if(validation.error) {
+            res.status(400).send(generateValidationErrorMessage(validation.error.details))
+            return
+        }
+
+        const updateBanni = validation.value
+
+        try {
+            const userUseCase = new UserUseCase(AppDataSource)
+            const selectedUser = await userUseCase.getUser(updateBanni.id)
+            if (selectedUser === null) {
+                res.status(404).send({"error": `User ${updateBanni.id} not found`})
+                return
+            }
+
+            const bannissementFound = await AppDataSource.getRepository(Bannissement).findOne({where: {id: updateBanni.bannissementId}, relations: ["user"]})
+
+            const bannissementCreated = await AppDataSource.getRepository(Bannissement).save({...bannissementFound,dateFin: new Date(updateBanni.dateFin)})
+
+            selectedUser.bannissements.map((banni) => banni.id === bannissementCreated.id ? bannissementCreated : banni)
             res.status(200).send(selectedUser)
         }catch(error) {
             console.log(error)

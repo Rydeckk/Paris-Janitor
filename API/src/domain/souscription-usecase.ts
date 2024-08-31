@@ -13,6 +13,7 @@ export class SouscriptionUseCase {
         const query = this.db.createQueryBuilder(Souscription, "souscription")
         query.innerJoinAndSelect("souscription.user", "user")
         query.innerJoinAndSelect("souscription.abonnement", "abonnement")
+        query.innerJoinAndSelect("souscription.facture","facture")
 
         if(listFilters.userId) {
             query.andWhere("user.id = :userId", {userId: listFilters.userId})
@@ -28,6 +29,7 @@ export class SouscriptionUseCase {
         const query = this.db.createQueryBuilder(Souscription, "souscription")
         query.innerJoinAndSelect("souscription.user", "user")
         query.innerJoinAndSelect("souscription.abonnement", "abonnement")
+        query.innerJoinAndSelect("souscription.facture","facture")
         query.where("user.id = :userId", {userId: userId})
         query.andWhere("souscription.dateDebut <= :date", {date: new Date()})
         query.andWhere("souscription.dateFin >= :date", {date: new Date()})
@@ -40,6 +42,7 @@ export class SouscriptionUseCase {
         const query = this.db.createQueryBuilder(Souscription, "souscription")
         query.innerJoinAndSelect("souscription.user", "user")
         query.innerJoinAndSelect("souscription.abonnement", "abonnement")
+        query.innerJoinAndSelect("souscription.facture","facture")
         query.where("user.id = :userId", {userId: userId})
         query.addOrderBy("souscription.dateFin","DESC")
         const souscriptionFound = await query.getOne()

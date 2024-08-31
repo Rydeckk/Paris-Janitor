@@ -12,6 +12,8 @@ import { Logement } from "../database/entities/logement"
 import { Service } from "../database/entities/service"
 import { generatePdfFactureReservation } from "../service/pdf"
 import { Facture } from "../database/entities/facture"
+import { Operation } from "../database/entities/operation"
+import { differenceEnJours } from "../utils/utils-function"
 const stripe = require('stripe')(process.env.API_KEY_STRIPE);
 
 export const ReservationHandler = (app: express.Express) => { 
@@ -62,6 +64,35 @@ export const ReservationHandler = (app: express.Express) => {
                 montant: reservationCreated.montant,
                 user: userFound,
                 reservation: reservationCreated
+            })
+
+            const repoOperation = AppDataSource.getRepository(Operation)
+
+            //Opération voyageur
+            await repoOperation.save({
+                montant: reservationFound.montant,
+                type: "paye",
+                description: "paiement réservation",
+                user: userFound
+            })
+
+            const totalBailleur = (differenceEnJours(reservationFound.dateDebut, reservationFound.dateFin) * reservationFound.logement.prixNuit) * 0.8
+            const partPJ = (differenceEnJours(reservationFound.dateDebut, reservationFound.dateFin) * reservationFound.logement.prixNuit) * 0.2
+            const totalPJ = reservationFound.services.reduce((acc, service) => (acc + service.prix),0) + reservationFound.logement.services.reduce((acc, service) => (acc + service.prix),0) + partPJ
+
+            //Opération bailleur
+            await repoOperation.save({
+                montant: totalBailleur,
+                type: "gagne",
+                description: "paiement réservation",
+                user: logementFound.user
+            })
+
+            //Opération PJ
+            await repoOperation.save({
+                montant: totalPJ,
+                type: "gagne",
+                description: "paiement réservation"
             })
 
             const reservationFoundWithFacture = await AppDataSource.getRepository(Reservation).findOne({where: {id: reservationCreated.id}, relations: ["user","logement","services","logement.services","facture"]})

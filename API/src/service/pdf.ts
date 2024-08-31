@@ -2,7 +2,7 @@ import PDFDocument from 'pdfkit';
 import fs from "fs-extra"
 import { devisData, typeBienString, typeLocationString } from '../types/types';
 import { Reservation } from '../database/entities/reservation';
-import { differenceEnJours, formatDateToLocalString } from '../utils/utils-function';
+import { differenceEnJours, formatDateTimeToLocalString, formatDateToLocalString } from '../utils/utils-function';
 import { Service } from '../database/entities/service';
 import { Souscription } from '../database/entities/souscription';
 
@@ -28,6 +28,7 @@ export function generatePdfDevis(devisData: devisData) {
         .text(devisData.nom + " " + devisData.prenom, 200, 65, {align: "right"})
 		.text('23, rue Montorgueil', 50, 80)
 		.text('Paris, 75002, France', 50, 90)
+        .text(formatDateTimeToLocalString(new Date()),200,75, {align: "right"})
 		.moveDown()
 
     doc.fillColor('#519164')
@@ -178,6 +179,7 @@ export function generatePdfFactureReservation(reservation: Reservation, time: nu
 		.text('23, rue Montorgueil', 50, 80)
 		.text('Paris, 75002, France', 50, 90)
         .text('Numéro de facture : '+ time, 200, 75, {align: "right"})
+        .text(formatDateTimeToLocalString(new Date()),200,85, {align: "right"})
 		.moveDown()
 
     doc.fillColor('#bda34d')
@@ -305,6 +307,7 @@ export function generatePdfFactureSouscription(souscription: Souscription, time:
 		.text('23, rue Montorgueil', 50, 80)
 		.text('Paris, 75002, France', 50, 90)
         .text('Numéro de facture : '+ time, 200, 75, {align: "right"})
+        .text(formatDateTimeToLocalString(new Date()),200,85, {align: "right"})
 		.moveDown()
 
     doc.fillColor('#519164')

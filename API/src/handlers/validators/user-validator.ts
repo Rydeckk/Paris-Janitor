@@ -35,14 +35,16 @@ export interface GetUsersRequest {
     page?: number
     limit?: number,
     isOwner?: boolean,
-    isAdmin?: boolean
+    isAdmin?: boolean,
+    isBan?: boolean
 }
 
 export const getUsersValidation = Joi.object<GetUsersRequest>({
     page: Joi.number().min(1).optional(),
     limit: Joi.number().min(1).optional(),
     isOwner: Joi.bool().optional(),
-    isAdmin: Joi.bool().optional()
+    isAdmin: Joi.bool().optional(),
+    isBan: Joi.bool().optional()
 })
 
 export interface GetUserByIdRequest {

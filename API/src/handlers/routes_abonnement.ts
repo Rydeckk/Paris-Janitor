@@ -13,6 +13,7 @@ import { Logement } from "../database/entities/logement"
 import { SouscriptionUseCase } from "../domain/souscription-usecase"
 import { generatePdfFactureSouscription } from "../service/pdf"
 import { Facture } from "../database/entities/facture"
+import { Operation } from "../database/entities/operation"
 
 export const AbonnementHandler = (app: express.Express) => {
     app.post("/abonnement", authMiddlewareAdmin, async (req: Request, res: Response) => {
@@ -163,7 +164,8 @@ export const AbonnementHandler = (app: express.Express) => {
                 user: userFound, 
                 abonnement: abonnementFound, 
                 dateDebut: dateDebut,
-                dateFin: dateFin
+                dateFin: dateFin,
+                montant: abonnementFound.montant
             })
 
             const souscriptionFound = await AppDataSource.getRepository(Souscription).findOne({where: {id: souscriptionCreated.id}, relations: ["user","abonnement"]})
@@ -182,7 +184,7 @@ export const AbonnementHandler = (app: express.Express) => {
                 numeroFacture: String(today.getTime()),
                 nomPersonne: userFound.lastName,
                 prenom: userFound.firstName,
-                montant: souscriptionFound.abonnement.montant,
+                montant: souscriptionFound.montant,
                 user: userFound,
                 souscription: souscriptionFound
             })
@@ -193,6 +195,23 @@ export const AbonnementHandler = (app: express.Express) => {
             listLogement.logements.forEach(async (logement) => {
                 logement.isActif = true
                 await AppDataSource.getRepository(Logement).save(logement)
+            })
+
+            const repoOperation = AppDataSource.getRepository(Operation)
+
+            //Opération du bailleur
+            await repoOperation.save({
+                montant: souscriptionFound.montant,
+                type: "paye",
+                description: "paiement abonnement",
+                user: userFound
+            })
+
+            //Opération pour PJ
+            await repoOperation.save({
+                montant: souscriptionFound.montant,
+                type: "gagne",
+                description: "paiement abonnement"
             })
             
             const souscriptionFoundWithFacture = await AppDataSource.getRepository(Souscription).findOne({where: {id: souscriptionCreated.id}, relations: ["user","abonnement","facture"]})

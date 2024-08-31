@@ -10,6 +10,8 @@ export type TypeLocation = "entier" | "partiel"
 
 export type TypeService = "traveler" | "owner"
 
+export type TypeOperation = "paye" | "gagne"
+
 export type devisData = {
     adresse: string,
     codePostal: string
