@@ -7,7 +7,7 @@ export function NavBarAbonnement() {
     return (
         <div className="navbar_white">
             <div>
-                <NavLink to={""} className={({ isActive }) => (isActive ? "navlink_inverse navlink_inverse_active" : "navlink_inverse")} end>Mon abonnement</NavLink>
+                <NavLink to={""} className={({ isActive }) => (isActive ? "navlink_inverse navlink_inverse_active" : "navlink_inverse")} end>{user.user?.role.isAdmin ? "Abonnement" : "Mon abonnement"}</NavLink>
                 <NavLink to={"historique"} className={({ isActive }) => (isActive ? "navlink_inverse navlink_inverse_active" : "navlink_inverse")} end>Historique</NavLink>
             </div>
         </div>

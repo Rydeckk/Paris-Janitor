@@ -7,10 +7,8 @@ export function formatDateToLocalISOString(date: Date): string {
     const year = trueDate.getFullYear();
     const month = pad(trueDate.getMonth() + 1);
     const day = pad(trueDate.getDate());
-    const hours = pad(trueDate.getHours());
-    const minutes = pad(trueDate.getMinutes());
 
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
+    return `${year}-${month}-${day}`;
 }
 
 export function formatDateTimeToLocalString(date: Date): string {

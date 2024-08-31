@@ -8,6 +8,11 @@ import { HomeAdmin } from "./HomeAdmin";
 import { ListeServicesDisponible } from "../component/Service/ListeServicesDisponible";
 import { ListeLogements } from "../component/Logement/ListeLogements";
 import { Login } from "../component/Auth/Login";
+import { Utilisateur } from "../component/Utilisateur/Utilisateur";
+import { Abonnement } from "../component/Abonnement/Abonnement";
+import { Document } from "../component/Document/Document";
+import { Logement } from "../component/Logement/Logement";
+import { ListeOperation } from "../component/Operation/ListeOperation";
 
 export function Master() {
     const [typeCompte, setTypeCompte] = useState<TypeUser>("admin")
@@ -41,11 +46,13 @@ export function Master() {
             <NavBarAdmin />
             <Routes>
                 <Route path="/" element={<HomeAdmin />}/>
-                <Route path="/logement/*" element={<ListeLogements />} />
+                <Route path="/logement/*" element={<Logement />} />
                 <Route path="/service/*" element={<ListeServicesDisponible />}/>
-                <Route path="/user/*"/>
-                <Route path="/abonnement"/>
+                <Route path="/user/*" element={<Utilisateur />}/>
+                <Route path="/abonnement/*" element={<Abonnement />}/>
+                <Route path="/document/*" element={<Document />}/>
                 <Route path="/login" element={<Login from="admin" />}/>
+                <Route path="/transaction" element={<ListeOperation />}/>
             </Routes>
         </div>
     )

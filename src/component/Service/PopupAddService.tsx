@@ -25,12 +25,10 @@ export function PopupAddService({isOpen, onClose, onAdd, serviceUpdate, onUpdate
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        const nativeEvent = event.nativeEvent as SubmitEvent;
-        const submitter = nativeEvent.submitter as HTMLButtonElement;
-        if(submitter.name === "add") {
-            onAdd({nom: titre, type: type, prix: montant})
+        if(serviceUpdate) {
+            onUpdate({...serviceUpdate, nom: titre, type: type, prix: montant})
         } else {
-            if(serviceUpdate) onUpdate({...serviceUpdate, nom: titre, type: type, prix: montant})
+            onAdd({nom: titre, type: type, prix: montant})
         }
     }
 
@@ -40,7 +38,7 @@ export function PopupAddService({isOpen, onClose, onAdd, serviceUpdate, onUpdate
         <div className="popup_background">
             <div className="popup_content">
                 <button className="close_popup" onClick={onClose}>&times;</button>
-                <label className="title">Création d'un service</label> 
+                <label className="title">{serviceUpdate ? "Modification d'un service" : "Création d'un service"}</label> 
                 <form onSubmit={handleSubmit}>
                     <div className="div_form">
                         <label>Titre du service</label>

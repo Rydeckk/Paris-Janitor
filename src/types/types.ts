@@ -87,7 +87,8 @@ export type UserInfoWithId = {
     lastName: string,
     phone: string,
     email: string,
-    role: Role
+    role: Role,
+    bannissements: Bannissement[]
 }
 
 export type DevisData = {
@@ -180,11 +181,35 @@ export type Abonnement = {
 
 export type Souscription = {
     id: number,
+    montant: number,
     dateDebut: Date,
     dateFin: Date,
     user: UserInfoWithId,
     abonnement: Abonnement,
     facture: Facture
+}
+
+export type Bannissement = {
+    id: number,
+    motif: string,
+    dateDebut: Date,
+    dateFin: Date,
+    user: UserInfoWithId,
+}
+
+export type CreateBannissement = {
+    motif: string,
+    dateDebut: Date,
+    dateFin: Date
+}
+
+export type Operation = {
+    id: number,
+    montant: number,
+    description: string,
+    type: TypeOperation,
+    dateExecuter: Date,
+    user: UserInfoWithId
 }
 
 export type TypeUser = "traveler" | "owner" | "admin"
@@ -198,6 +223,8 @@ export type TypeBien = "maison" | "appartement"
 export type TypeLocation = "entier" | "partiel"
 
 export type TypeService = "traveler" | "owner"
+
+export type TypeOperation = "paye" | "gagne"
 
 export const spaceColors: Record<TypeSpace, string> = {
     traveler: '#bda34d', 

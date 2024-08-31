@@ -575,8 +575,6 @@ abbr[title] {
 }
 
 .div_list_in_row {
-    display: flex;
-    flex-direction: column;
     height: 100px;
     overflow-y: auto;
 }

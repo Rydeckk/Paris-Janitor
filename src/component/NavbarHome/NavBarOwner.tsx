@@ -18,6 +18,7 @@ export function NavBarOwner() {
                 {user.user && (<NavLink to={"logement"} className={({ isActive }) => (isActive ? "navlink link_active" : "navlink")}>Mes logements</NavLink>)}
                 {user.user && (<NavLink to={"abonnement"} className={({ isActive }) => (isActive ? "navlink link_active" : "navlink")}>Mon abonnement</NavLink>)}
                 {user.user && (<NavLink to={"document"} className={({ isActive }) => (isActive ? "navlink link_active" : "navlink")}>Mes documents</NavLink>)}
+                {user.user && (<NavLink to={"transaction"} className={({ isActive }) => (isActive ? "navlink link_active" : "navlink")} end>Transactions</NavLink>)}
             </div>
             <div>
                 <NavLink to={"devis"} className={({ isActive }) => (isActive ? "navlink link_active" : "navlink")} end>Obtenir un devis</NavLink>

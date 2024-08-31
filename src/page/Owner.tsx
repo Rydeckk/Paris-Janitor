@@ -12,6 +12,7 @@ import { SignUp } from "../component/Auth/SignUp";
 import { ListeDevis } from "../component/Document/ListeDevis";
 import { Document } from "../component/Document/Document";
 import { Abonnement } from "../component/Abonnement/Abonnement";
+import { ListeOperation } from "../component/Operation/ListeOperation";
 
 export function Owner() {
     const [typeCompte, setTypeCompte] = useState<TypeUser>("owner")
@@ -47,6 +48,7 @@ export function Owner() {
                 <Route path={"/devis"} element={<Devis />} />
                 <Route path={"/login"} element={<Login from="owner"/>} />
                 <Route path={"/signup"} element={<SignUp from="owner" />} />
+                <Route path={"/transaction"} element={<ListeOperation />}/>
             </Routes>
         </div>
     )

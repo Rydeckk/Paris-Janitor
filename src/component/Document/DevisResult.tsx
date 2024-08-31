@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Devis, DevisData, typeBienString, typeLocationString } from "../../types/types";
+import { Abonnement, Devis, DevisData, typeBienString, typeLocationString } from "../../types/types";
 import { useUserContext } from "../../main";
 import { useNavigate } from "react-router-dom";
 import { createLogement, addServiceLogement } from "../../request/requestLogement";
 import { sendMailDevis } from "../../request/requestMail";
 import { createDevis, createDevisNonConnecte } from "../../request/requestDevis";
+import { getAbonnement } from "../../request/requestAbonnement";
 
 interface DevisResultProps {
     devisData: DevisData
@@ -13,20 +14,34 @@ interface DevisResultProps {
 
 export function DevisResult({devisData, onUpdate}: DevisResultProps) {
     const [total, setTotal] = useState<number>(0)
+    const [abonnement, setAbonnement] = useState<Abonnement>()
     const [devis, SetDevis] = useState<Devis>()
     const [isVisibleButtonMail, setIsVisibleButtonMail] = useState<boolean>(true)
     const user = useUserContext()
     const navigate = useNavigate()
 
     useEffect(() => {
+        const fetchAbonnement = async () => {
+            const abonnement = await getAbonnement()
+            if(abonnement) {
+                setAbonnement(abonnement)
+            }
+        }
+
+        fetchAbonnement()
+    }, [])
+
+    useEffect(() => {
         let total = 0
         total += devisData.prixNuit * 0.2
         devisData.services.forEach((service) => total += service.prix)
-        //Prix abonnement (à récupérer par la suite en base)
-        total += 100 
+
+        if(abonnement) {
+            total += abonnement.montant
+        }
 
         setTotal(total)
-    }, [devisData])
+    }, [devisData, abonnement])
 
     useEffect(() => {
         const createDevisRequest = async () => {

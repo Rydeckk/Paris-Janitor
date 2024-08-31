@@ -38,7 +38,7 @@ export function ListeLogements({statut}: ListeLogementsProps) {
         }
 
         listLogement()
-    }, [typeCompte])
+    }, [typeCompte, statut])
 
     useEffect(() => {  
         const fetchMySouscription = async () => {
@@ -70,10 +70,11 @@ export function ListeLogements({statut}: ListeLogementsProps) {
 
     return (
         <div>
-            {!souscription && user.user?.role.isOwner && (<label className="label_info">Vous devez payer votre cotisation pour rendre actif vos logements !</label>)}
+            {!souscription && user.user?.role.isOwner && !user.user.role.isAdmin && (<label className="label_info">Vous devez payer votre cotisation pour rendre actif vos logements !</label>)}
             {!logement && (<div>
                 <label className="title">{user.user?.role.isAdmin ? "Liste des logements" : (user.user?.role.isOwner ? "Mes Logements" : "Logements disponibles")}</label>
                 <div className="div_liste_horizontal">
+                    {statut && statut === "attenteValidation" && (<label className="label_info">Aucun logement en attente de validation</label>)}
                     {listeLogements.map((logement) => (
                         <LogementComponent key={logement.id} logement={logement} onClick={(logement) => setLogement(logement)}/>
                     ))}
