@@ -14,6 +14,7 @@ import { Document } from "../component/Document/Document";
 import { Logement } from "../component/Logement/Logement";
 import { ListeOperation } from "../component/Operation/ListeOperation";
 import { NoteService } from "../component/Service/NoteService";
+import { EtatLieu } from "../component/EtatLieu/EtatLieu";
 
 export function Master() {
     const [typeCompte, setTypeCompte] = useState<TypeUser>("admin")
@@ -62,6 +63,7 @@ export function Master() {
                 <Route path="/document/*" element={<Document />}/>
                 <Route path="/login" element={<Login from="admin" />}/>
                 <Route path="/transaction" element={<ListeOperation />}/>
+                <Route path="/etatLieu/*" element={<EtatLieu />} />
             </Routes>
         </div>
     )

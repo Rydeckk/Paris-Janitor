@@ -98,3 +98,21 @@ export async function payeReservation(montant: number) {
     const data = await response.json()
     return data
 } 
+
+export async function getListReservationEtatLieu(type: "entree" | "sortie"): Promise<{reservations: Array<Reservation>}> {
+    const url = new URL(import.meta.env.VITE_URL_API+"/reservationEtatLieu")
+    url.searchParams.append("type",type)
+    const headers = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer '+ localStorage.getItem("token")})
+    const response = await fetch(url.toString(), {
+        
+    method: 'GET',
+    headers: headers
+    })
+
+    const data = await response.json()
+    const reservations = data
+
+    return {
+        reservations
+    }
+}

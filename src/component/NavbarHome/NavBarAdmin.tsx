@@ -20,6 +20,7 @@ export function NavBarAdmin() {
                 {user.user && (<NavLink to={"service"} className={({ isActive }) => (isActive ? "navlink link_active" : "navlink")}>Services</NavLink>)}
                 {user.user && (<NavLink to={"abonnement"} className={({ isActive }) => (isActive ? "navlink link_active" : "navlink")}>Abonnement</NavLink>)}
                 {user.user && (<NavLink to={"document"} className={({ isActive }) => (isActive ? "navlink link_active" : "navlink")}>Documents</NavLink>)}
+                {user.user && (<NavLink to={"etatLieu"} className={({ isActive }) => (isActive ? "navlink link_active" : "navlink")}>Etat des lieux</NavLink>)}
                 {user.user && (<NavLink to={"transaction"} className={({ isActive }) => (isActive ? "navlink link_active" : "navlink")} end>Transactions</NavLink>)}
             </div>
             <div>

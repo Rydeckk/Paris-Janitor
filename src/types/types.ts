@@ -159,7 +159,9 @@ export type Reservation = {
     user: UserInfoWithId, 
     logement: Logement, 
     services: Service[],
-    facture: Facture
+    facture: Facture,
+    etatLieuEntree: EtatLieu,
+    etatLieuSortie: EtatLieu
 }
 
 export type Facture = {
@@ -240,6 +242,35 @@ export type Equipement = {
 export type CreateEquipement = {
     nom: string, 
     etat: EtatEquip
+}
+
+export type EtatLieu = {
+    id: number, 
+    nomEtatLieu: string, 
+    nom: string, 
+    prenom: string, 
+    dateCreation: Date, 
+    etatEquipements: EtatEquipement[], 
+    reservationEntree: Reservation
+    reservationSortie: Reservation
+}
+
+export type CreateEtatLieu = {
+    reservationId: number,
+    type: "entree" | "sortie",
+    etatsEquipements: CreateEtatEquipement[]
+}
+
+export type EtatEquipement = {
+    id: number, 
+    etat: EtatEquip, 
+    etatLieu: EtatLieu, 
+    equipement: Equipement
+}
+
+export type CreateEtatEquipement = {
+    etat: EtatEquip, 
+    equipement: Equipement
 }
 
 export type TypeUser = "traveler" | "owner" | "admin"

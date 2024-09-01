@@ -28,6 +28,7 @@ export function NavBarLogement() {
                 {user.user?.role.isOwner && (<NavLink to={"service"} className={({ isActive }) => (isActive ? "navlink_inverse navlink_inverse_active" : "navlink_inverse")} end>Service</NavLink>)}
                 {user.user?.role.isOwner && (<NavLink to={"equipement"} className={({ isActive }) => (isActive ? "navlink_inverse navlink_inverse_active" : "navlink_inverse")} end>Equipements</NavLink>)}
                 {user.user?.role.isOwner && (<NavLink to={"historique"} className={({ isActive }) => (isActive ? "navlink_inverse navlink_inverse_active" : "navlink_inverse")} end>Historique</NavLink>)}
+                {user.user?.role.isOwner && (<NavLink to={"etatLieu"} className={({ isActive }) => (isActive ? "navlink_inverse navlink_inverse_active" : "navlink_inverse")} end>Etat des lieux</NavLink>)}
                 {!user.user?.role.isOwner && datesReservation.length > 0 && (<NavLink to={"reservation"} className={({ isActive }) => (isActive ? "navlink_inverse navlink_inverse_active" : "navlink_inverse")} end>Réservation</NavLink>)}
             </div>
         </div>
