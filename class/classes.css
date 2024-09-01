@@ -1,0 +1,901 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #eee;
+}
+
+:root {
+    --couleur-principale: #584bd1;
+    --couleur-secondaire: #eee;
+}
+
+.div_liste_horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.card_logement {
+    height: 300px;
+    width: 350px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    margin-right: 50px;
+    margin-bottom: 50px;
+}
+
+.card_logement img {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    border-radius: 10px;
+}
+
+.card_logement_div_title {
+    display: flex;
+    text-wrap: wrap;
+    margin-top: auto;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 0px 10px;
+    z-index: 1;
+}
+
+.label_card {
+    opacity: 1;
+    color: #222;
+    font-size: 26px;
+}
+
+.navbar {
+    background-color: var(--couleur-principale);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    padding: 0px 15px;
+}
+
+.navbar_white {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    padding: 0px 15px;
+}
+
+.navlink_inverse {
+    text-decoration: none;
+    color: var(--couleur-principale);
+    margin: 0px 10px;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: 1px solid var(--couleur-principale);
+    border-radius: 15px;
+    background-color: var(--couleur-secondaire);
+    min-width: 200px;
+    max-width: 200px;
+
+    &:hover {
+        background-color: var(--couleur-principale);
+        color: var(--couleur-secondaire);
+    }
+}
+
+.navlink_inverse_active {
+    background-color: var(--couleur-principale);
+    color: var(--couleur-secondaire);
+}
+
+.navlink {
+    text-decoration: none;
+    color: var(--couleur-secondaire);
+    margin: 0px 10px;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: 1px solid var(--couleur-secondaire);
+    border-radius: 15px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.navlink:hover {
+    background-color: var(--couleur-secondaire);
+    color: var(--couleur-principale);
+}
+
+.title {
+    padding: 20px;
+    color: var(--couleur-principale);
+    font-size: 40px;
+    text-wrap: wrap;
+    text-align: center;
+}
+
+.little_title {
+    margin: 20px 0px;
+    color: var(--couleur-principale);
+    font-size: 20px;
+}
+
+.link_active {
+    background-color: var(--couleur-secondaire);
+    color: var(--couleur-principale);
+}
+
+.div_statut {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    border-radius: 10px;
+    z-index: 2;
+}
+
+.div_welcome {
+    position: relative;
+    height: 600px;
+    width: 100%;
+}
+
+.div_welcome div {
+    position: absolute;
+    color: var(--couleur-principale);
+    font-weight: bold;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    text-wrap: wrap;
+    font-size: 40px;
+    top: 50%;
+    left: 50%;
+    width: 800px;
+    height: 200px;
+    transform: translate(-50%, -50%);
+}
+
+.div_detail {
+    border-radius: 15px;
+    padding: 15px;
+    margin: 0px 10px;
+    background-color: #ddd;
+    border: solid 2px #aaa;
+    margin: 20px;
+}
+
+.div_img_principal {
+    height: 400px;
+    width: 550px;
+    border-radius: 15px;
+    margin: 15px;
+}
+
+.div_img_principal img {
+    border-radius: 15px;
+    height: inherit;
+    width: inherit;
+}
+
+.div_list_img_petite {
+    display: flex;
+    flex-direction: row;
+}
+
+.div_list_img_petite div {
+    position: relative;
+    height: 80px;
+    width: 80px;
+    margin: 0px 10px;
+    border-radius: 15px;
+    border: solid 1px #D2D2D2;
+    background-color: #eee;
+
+    &:hover {
+        border: 1px solid blue;
+    }
+}
+
+.div_list_img_petite div img {
+    border-radius: 15px;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+}
+
+.div_list_img_petite div button {
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 15px;
+    background-color: rgba(238, 238, 238, 0.767);
+    cursor: pointer;
+    z-index: 1;
+    position: absolute;
+    border: none;
+    width: 20px;
+    height: 20px;
+    right: 0%;
+    text-align: center;
+    align-items: center;
+
+    &:hover {
+        color: red;
+    }
+}
+
+.popup_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup_content {
+    background-color: #eee;
+    padding: 20px;
+    border-radius: 8px;
+    width: 500px;
+    position: relative;
+}
+
+.popup_content h2 {
+    color: var(--couleur-principale);
+}
+
+.close_popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.file_imput {
+    display: none;
+}
+
+.file_name {
+    margin: 10px 0;
+    padding: 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.upload_button {
+    background-color: var(--couleur-principale);
+    color: var(--couleur-secondaire);
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    
+    &:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+    
+    &:hover:not(:disabled) {
+        background-color: var(--couleur-principale);
+    }
+}
+
+.div_content_logement_detail {
+    display: flex;
+    justify-content: space-between;
+}
+
+.div_logement_info {
+    padding: 15px;
+    border-radius: 15px;
+    background-color: #eee;
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 550px;
+}
+
+.div_logement_info_content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+.div_info_value {
+    display: flex;
+    flex-direction: column;
+    color: var(--couleur-principale);
+    width: 48%;
+}
+
+.div_info_value label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.div_info_value input {
+    font-size: 20px;
+    background: none;
+    border: none;
+    border-bottom: solid 1px var(--couleur-principale);
+    outline: none;
+    padding: 2px;
+}
+
+.div_info_value select {
+    font-size: 20px;
+    background: none;
+    border: none;
+    border-bottom: solid 1px var(--couleur-principale);
+    outline: none;
+    padding: 2px;
+
+    &:disabled {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none; 
+    }
+}
+
+.select {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 10px 0px;
+    font-size: 20px;
+    background: none;
+    border: none;
+    border-bottom: solid 1px var(--couleur-principale);
+    outline: none;
+}
+
+.div_button_info_logement {
+    margin: 15px 0px;
+    padding: 0px 15px;
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.button {
+    background-color: var(--couleur-principale);
+    border: none;
+    color: var(--couleur-secondaire);
+    font-size: 16px;
+    align-content: center;
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin: 10px;
+    min-width: 150px;
+    max-width: 250px;
+
+    &:hover:enabled {
+        background-color: var(--couleur-secondaire);
+        border: solid 1px var(--couleur-principale);
+        color: var(--couleur-principale);
+    }
+
+    &:disabled {
+        background-color: #bbb;
+        cursor: not-allowed;
+    }
+}
+
+.button_suppr {
+    background-color: rgb(199, 1, 1);
+    border: none;
+    color: var(--couleur-secondaire);
+    font-size: 16px;
+    align-content: center;
+    border-radius: 10px;
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin: 10px;
+    min-width: 150px;
+    max-width: 250px;
+
+    &:hover {
+        background-color: var(--couleur-secondaire);
+        border: solid 1px rgb(199, 1, 1);
+        color: rgb(199, 1, 1);
+    }
+}
+
+.div_detail_calendrier {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0px;
+}
+
+.react-calendar { 
+    width: 60% !important;
+    height: fit-content !important;
+    background-color: #fff;
+    color: #222;
+    border-radius: 8px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    font-family: var(--bs-body-font-family) !important;
+    line-height: 1.125em;
+}
+.react-calendar__navigation button {
+    color: var(--couleur-principale);
+    min-width: 44px;    
+    background: none;
+    font-size: 16px;
+    margin-top: 8px;
+}
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+    background-color: #f8f8fa;
+}
+.react-calendar__navigation button[disabled] {
+    background-color: #f0f0f0;
+}
+abbr[title] {
+    text-decoration: none;
+}
+.react-calendar__month-view__days__day--weekend:enabled {
+    color: #222;
+}
+.react-calendar__month-view__days__day--weekend:enabled:hover,
+.react-calendar__month-view__days__day--weekend:enabled:focus {
+    color: var(--couleur-secondaire) !important;
+}
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+    background: var(--couleur-principale) !important;
+    color: var(--couleur-secondaire) !important;
+    border-radius: 6px;
+}
+.react-calendar__viewContainer {
+    width: 100%;
+    height: 100%;
+}
+.react-calendar__month-view__days {
+    height: 100%;
+    width: 100%;
+}
+.react-calendar__tile {
+    height: 100px;
+}
+.react-calendar__tile--now {
+    border-radius: 6px;
+    border: solid 1px var(--couleur-principale) !important;
+    font-weight: bold;
+    color: #222;
+}
+.react-calendar__tile--now:enabled {
+    background: white;
+}
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+    background: #6f48eb33;
+    border-radius: 6px;
+    font-weight: bold;
+    color: var(--couleur-principale);
+}
+.react-calendar__tile--hasActive:enabled:hover,
+.react-calendar__tile--hasActive:enabled:focus {
+    background: #f8f8fa;
+}
+.react-calendar__tile--active {
+    background: var(--couleur-principale) !important;
+    border-radius: 6px;
+    font-weight: bold;
+    color: white;
+}
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+    background: var(--couleur-principale) !important;
+    color: white;
+}
+.react-calendar--selectRange .react-calendar__tile--hover {
+    background-color: #c2c2c2 !important;
+    color: var(--couleur-principale) !important;
+}
+.react-calendar__tile--range {
+    background: #c2c2c2 !important;
+    color: var(--couleur-principale) !important;
+    border-radius: 0;
+}
+.react-calendar__tile--rangeStart {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    background: var(--couleur-principale) !important;
+    color: white !important;
+}
+.react-calendar__tile--rangeEnd {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    background: var(--couleur-principale) !important;
+    color: white !important;
+}
+
+.div_end {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.div_liste {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    background-color: #eee;
+}
+
+.div_row {
+    display: flex;
+    align-items: center;
+    border-bottom: solid 1px var(--couleur-principale);
+    margin: 10px 0px;
+    padding: 10px;
+
+    & div {
+        width: 250px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        word-break: break-all;
+        text-align: center;
+        align-items: center;
+    }
+}
+
+.div_row_clickable {
+    cursor: pointer;
+
+    &:hover {
+        background-color: #39b0ff21;
+    }
+}
+
+.div_list_in_row {
+    height: 100px;
+    overflow-y: auto;
+}
+
+.div_header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #eee;
+}
+
+.div_img_button {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    margin: 10px 0px;
+
+    & img {
+        width: 40px;
+        height: 40px;
+        border: 1px solid var(--couleur-principale);
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    & label {
+        cursor: pointer;
+        color: var(--couleur-principale);
+    }
+
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+}
+
+.label_info {
+    color: var(--couleur-principale);
+    font-size: 20px;
+    margin: 10px;
+}
+
+.label_info_classic {
+    font-size: 20px;
+    margin: 10px;
+}
+
+.button_delete {
+    font-weight: bold;
+    border: none;
+    font-size: 16px;
+    margin: 0px 10px;
+
+    &:hover {
+        color: red;
+    }
+}
+
+.div_return {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    margin: 10px 5px;
+
+    & img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+
+    & label {
+        cursor: pointer;
+        color: var(--couleur-principale);
+    }
+
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline var(--couleur-principale);
+
+    }
+}
+
+.div_devis {
+    display: flex;
+    margin: 2% 20%;
+    border-radius: 15px;
+    padding: 15px;
+    background-color: #ddd;
+    border: solid 2px #aaa;
+    justify-content: center;
+
+}
+
+.div_devis_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+    background-color: #eee;
+    width: 100%;
+    padding: 30px;
+}
+
+.div_devis_bloc {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.div_localisation {
+    border-radius: 0px !important;
+    border-top: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
+    padding: 15px;
+    width: 100%;
+}
+
+.div_localisation div {
+    width: 100%;
+    display: flex;
+}
+
+.div_devis_champs {
+    padding: 5px 15px;
+    width: 100% !important;
+    display: flex;
+}
+
+.div_devis_champs div {
+    width: 100%;
+    display: flex;
+}
+
+.label_required {
+    font-style: italic !important;
+    font-size: 14px !important;
+    color: rgb(173, 41, 41) !important;
+}
+
+.span {
+    border-top: solid 1px #ccc;
+    margin: 30px 15px;
+    width: 100%;
+}
+
+.label {
+    padding: 10px 30px;
+    font-size: 16px;
+}
+
+.label_color {
+    color: var(--couleur-principale);
+    padding: 10px 30px;
+    font-size: 16px;
+}
+
+.div_flex_row {
+    display: flex;
+    flex-direction: row;
+}
+
+.label_info_simple {
+    margin: 10px;
+    font-size: 16px;
+}
+
+.div_auth {
+    height: fit-content;
+    width: 100%;
+    height: 500px;
+    padding: 20px;
+    margin: 10px;
+    display: flex;
+    border-radius: 15px;
+    justify-content: center;
+}
+
+.div_auth_content {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    background-color: #eee;
+    padding: 10px 30px;
+    width: 40%;
+}
+
+.div_center {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 15px 0px;
+}
+
+.label_error {
+    font-size: 16px;
+    color: red;
+    margin: 10px 0px;
+}
+
+.div_img_in_input {
+    position: relative;
+
+    & input {
+        width: 100%;
+    }
+
+    & img {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        right: 5%;
+        top: 10%;
+        cursor: pointer;
+        display: none;
+    }
+
+    &:hover img {
+        display:inherit;
+    }
+}
+
+.div_form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 10px 5px;
+}
+
+.div_form label {
+    color: var(--couleur-principale);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.div_form input {
+    font-size: 20px;
+    background: none;
+    border: none;
+    border-bottom: solid 1px var(--couleur-principale);
+    outline: none;
+    padding: 2px;
+}
+
+.div_form textarea {
+    font-size: 20px;
+    background: none;
+    border: solid 1px var(--couleur-principale);
+    outline: none;
+    padding: 2px;
+}
+
+.div_form select {
+    font-size: 20px;
+    background: none;
+    border: none;
+    border-bottom: solid 1px var(--couleur-principale);
+    outline: none;
+    padding: 2px;
+
+    &:disabled {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none; 
+    }
+}
+
+.icone_clickable {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.little_icone_clickable {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.div_note {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    width: 100%;
+    padding: 15px;
+    border: solid 1px var(--couleur-principale);
+    position: relative;
+}
+
+.div_button_note {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 5%;
+    right: 0.5%;
+
+    & img {
+        background: none;
+        cursor: pointer;
+        margin: 0px 5px;
+        height: 15px;
+        width: 15px;
+    }
+
+    & button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        height: 20px;
+        width: 20px;
+
+        &:hover {
+            color: red;
+        }
+    }
+}
