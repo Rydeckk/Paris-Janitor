@@ -12,6 +12,8 @@ export type TypeService = "traveler" | "owner"
 
 export type TypeOperation = "paye" | "gagne"
 
+export type EtatEquip = "neuf" | "tresBonEtat" | "bonEtat" | "etatUsage" | "mauvaisEtat"
+
 export type devisData = {
     adresse: string,
     codePostal: string

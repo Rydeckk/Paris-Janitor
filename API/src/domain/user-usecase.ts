@@ -36,7 +36,7 @@ export class UserUseCase {
         query.leftJoinAndSelect("user.logements","logements")
         query.leftJoinAndSelect("user.souscriptions","souscriptions")
         query.leftJoinAndSelect("user.operations", "ope")
-        
+        query.leftJoinAndSelect("user.notes", "note")
 
         if(listUserFilter.isAdmin !== undefined) {
             query.andWhere('role.isAdmin= :isAdmin', {isAdmin: listUserFilter.isAdmin})
@@ -53,7 +53,7 @@ export class UserUseCase {
                 query.andWhere("banni.dateFin > :date",{date: new Date()})
             } else {
                 query.leftJoinAndSelect("user.bannissements","banni")
-                //Sous requête pour exclure les utilisateurs qui ont un bannissements en cours
+                //Sous requête pour exclure les utilisateurs qui ont un bannissement en cours
                 query.andWhere(qb => {
                     const subQuery = qb.subQuery()
                         .select("b2.id")
@@ -81,6 +81,7 @@ export class UserUseCase {
         query.leftJoinAndSelect("user.souscriptions","souscriptions")
         query.leftJoinAndSelect("user.bannissements","banni")
         query.leftJoinAndSelect("user.operations", "ope")
+        query.leftJoinAndSelect("user.notes", "note")
         query.where("user.id = :id", {id: id})
 
         const userFound = await query.getOne()
@@ -98,6 +99,7 @@ export class UserUseCase {
         queryToken.leftJoinAndSelect("user.souscriptions","souscriptions")
         queryToken.leftJoinAndSelect("user.bannissements","banni")
         queryToken.leftJoinAndSelect("user.operations", "ope")
+        queryToken.leftJoinAndSelect("user.notes", "note")
         queryToken.where('token.token= token',{token: token})
         const tokenFound = await queryToken.getOne()
 
@@ -113,6 +115,7 @@ export class UserUseCase {
         queryUser.leftJoinAndSelect("user.souscriptions","souscriptions")
         queryUser.leftJoinAndSelect("user.bannissements","banni")
         queryUser.leftJoinAndSelect("user.operations", "ope")
+        queryUser.leftJoinAndSelect("user.notes", "note")
         queryUser.where('user.id= :userId',{userId: tokenFound.user.id})
 
         const user = await queryUser.getOne()
@@ -133,6 +136,7 @@ export class UserUseCase {
         query.leftJoinAndSelect("user.souscriptions","souscriptions")
         query.leftJoinAndSelect("user.bannissements","banni")
         query.leftJoinAndSelect("user.operations", "ope")
+        query.leftJoinAndSelect("user.notes", "note")
         query.where("user.id = :userId", {userId: id})
 
         const userFound = await query.getOne()
@@ -164,6 +168,7 @@ export class UserUseCase {
         query.leftJoinAndSelect("user.souscriptions","souscriptions")
         query.leftJoinAndSelect("user.bannissements","banni")
         query.leftJoinAndSelect("user.operations", "ope")
+        query.leftJoinAndSelect("user.notes", "note")
         query.where("user.id = :userId", {userId: id})
 
         const userFound = await query.getOne()
@@ -200,6 +205,7 @@ export class UserUseCase {
         query.leftJoinAndSelect("user.souscriptions","souscriptions")
         query.leftJoinAndSelect("user.bannissements","banni")
         query.leftJoinAndSelect("user.operations", "ope")
+        query.leftJoinAndSelect("user.notes", "note")
         query.where("user.id = :userId", {userId: id})
 
         const userFound = await query.getOne()

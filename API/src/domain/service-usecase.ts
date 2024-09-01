@@ -38,6 +38,9 @@ export class ServiceUseCase {
 
     async listService(filters: FiltersService): Promise<{services: Service[]}> {
         const query = this.db.createQueryBuilder(Service, 'service')
+        query.leftJoinAndSelect("service.logements","logement")
+        query.leftJoinAndSelect("service.reservations", "reservation")
+        query.leftJoinAndSelect("service.notes", "note")
 
         if(filters.type !== undefined) {
             query.andWhere("service.type = :type", {type: filters.type})
@@ -54,6 +57,7 @@ export class ServiceUseCase {
         query.where("service.id = :serviceId", {serviceId: id})
         query.leftJoinAndSelect("service.logements","logement")
         query.leftJoinAndSelect("service.reservations", "reservation")
+        query.leftJoinAndSelect("service.notes", "note")
 
         const serviceFound = query.getOne()
         if(serviceFound === null) return null

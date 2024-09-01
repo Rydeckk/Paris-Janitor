@@ -171,7 +171,9 @@ export const UserHandler = (app: express.Express) => {
                 lastName: userFound.lastName,
                 phone: userFound.phone,
                 dateCreation: userFound.createdAt,
-                role: userFound.role
+                role: userFound.role,
+                bannissements: userFound.bannissements,
+                notes: userFound.notes
                 })
         } else {
             res.status(404).send({"error": "User not found"})

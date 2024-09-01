@@ -13,6 +13,8 @@ import { AbonnementHandler } from "./routes_abonnement"
 import { SouscriptionHandler } from "./routes_souscription"
 import { BannissementHandler } from "./routes_bannissement"
 import { OperationHandler } from "./routes_operation"
+import { NoteHandler } from "./routes_note"
+import { EquipementHandler } from "./routes_equipement"
 
 export const initRoutes = (app: express.Express) => {
 
@@ -30,4 +32,6 @@ export const initRoutes = (app: express.Express) => {
     SouscriptionHandler(app)
     BannissementHandler(app)
     OperationHandler(app)
+    NoteHandler(app)
+    EquipementHandler(app)
 }

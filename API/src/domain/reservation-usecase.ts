@@ -24,6 +24,7 @@ export class ReservationUseCase {
         query.innerJoinAndSelect("reservation.logement", "logement")
         query.innerJoinAndSelect("reservation.facture", "facture")
         query.leftJoinAndSelect("reservation.services", "service")
+        query.leftJoinAndSelect("service.notes","note")
         query.addOrderBy("reservation.dateCreation", "DESC")
 
         if(filters.logementId !== undefined) {
@@ -46,6 +47,7 @@ export class ReservationUseCase {
         query.innerJoinAndSelect("reservation.facture", "facture")
         query.innerJoinAndSelect("reservation.logement","logement")
         query.leftJoinAndSelect("reservation.services","service")
+        query.leftJoinAndSelect("service.notes","note")
         query.where("reservation.id = :reservationId", {reservationId: id})
 
         if(userId) {

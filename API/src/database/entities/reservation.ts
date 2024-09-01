@@ -3,6 +3,7 @@ import { User } from "./user";
 import { Service } from "./service";
 import { Logement } from "./logement";
 import { Facture } from "./facture";
+import { EtatLieu } from "./etatLieu";
 
 @Entity({name: "Reservation"})
 export class Reservation {
@@ -35,7 +36,15 @@ export class Reservation {
     @JoinColumn()
     facture: Facture
 
-    constructor(id: number, dateDebut: Date, dateFin: Date, dateCreation: Date, montant: number, user: User, logement: Logement, services: Service[], facture: Facture) {
+    @OneToOne(() => EtatLieu, etatLieu => etatLieu.reservation)
+    @JoinColumn()
+    etatLieuEntree: EtatLieu
+
+    @OneToOne(() => EtatLieu, reservation => reservation.reservation)
+    @JoinColumn()
+    etatLieuSortie: EtatLieu
+
+    constructor(id: number, dateDebut: Date, dateFin: Date, dateCreation: Date, montant: number, user: User, logement: Logement, services: Service[], facture: Facture, etatLieuEntree: EtatLieu, etatLieuSortie: EtatLieu) {
         this.id = id,
         this.dateDebut = dateDebut,
         this.dateFin = dateFin,
@@ -44,6 +53,8 @@ export class Reservation {
         this.user = user,
         this.logement = logement,
         this.services = services,
-        this.facture = facture
+        this.facture = facture,
+        this.etatLieuEntree = etatLieuEntree,
+        this.etatLieuSortie = etatLieuSortie
     }
 }
