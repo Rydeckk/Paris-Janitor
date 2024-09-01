@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import { Facture, Logement, Reservation } from "../../types/types"
-import { differenceEnJours, formatDateToLocalString } from "../../utils/utils-function"
+import { Facture, Logement, Reservation, Service } from "../../types/types"
+import { dateIsPasse, differenceEnJours, formatDateToLocalString } from "../../utils/utils-function"
 import { useUserContext } from "../../main"
 import { getListMyReservation, getListReservation, getListReservationLogement } from "../../request/requestReservation"
 import { downloadFacture } from "../../request/requestFacture"
+import { useNavigate } from "react-router-dom"
 
 interface ListeReservationProps {
     logement?: Logement
@@ -13,6 +14,7 @@ export function ListeReservation({logement}:ListeReservationProps) {
     const [reservations, setReservations] = useState<Array<Reservation>>([])
     const [total, setTotal] = useState<number>(0)
     const user = useUserContext()
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchListReservations = async () => {
@@ -56,6 +58,10 @@ export function ListeReservation({logement}:ListeReservationProps) {
         await downloadFacture(facture)
     }
 
+    const handleNote = async (services: Service[]) => {
+        navigate("/service/addnote", {state: {services: services}})
+    }
+
     return (
         <div className="div_detail" style={{ height: "800px"}}>
             <div className="div_liste">
@@ -81,6 +87,9 @@ export function ListeReservation({logement}:ListeReservationProps) {
                     <div>
                         <label className="label_info">Services additionnels</label>
                     </div>
+                    {!user.user?.role.isAdmin && !user.user?.role.isOwner && (<div>
+                        <label className="label_info">Noter</label>
+                    </div>)}
                     <div>
                         <label className="label_info">Facture</label>
                     </div>
@@ -112,6 +121,9 @@ export function ListeReservation({logement}:ListeReservationProps) {
                             ))}
                         </div>
                     </div>
+                    {!user.user?.role.isAdmin && !user.user?.role.isOwner && (<div>
+                        {dateIsPasse(reservation.dateDebut, reservation.dateFin) && (<img src="/icone/star.png" className="icone_clickable" onClick={() => handleNote(reservation.services)}/>)}
+                    </div>)}
                     <div>
                         <img src="/icone/download.png" className="icone_clickable" onClick={() => handleDownload(reservation.facture)}/>
                     </div>

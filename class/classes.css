@@ -123,7 +123,7 @@ body {
 }
 
 .little_title {
-    padding: 20px;
+    margin: 20px 0px;
     color: var(--couleur-principale);
     font-size: 20px;
 }
@@ -574,6 +574,14 @@ abbr[title] {
     }
 }
 
+.div_row_clickable {
+    cursor: pointer;
+
+    &:hover {
+        background-color: #39b0ff21;
+    }
+}
+
 .div_list_in_row {
     height: 100px;
     overflow-y: auto;
@@ -638,7 +646,7 @@ abbr[title] {
     display: flex;
     align-items: center;
     width: fit-content;
-    margin: 10px 0px;
+    margin: 10px 5px;
 
     & img {
         width: 40px;
@@ -653,7 +661,8 @@ abbr[title] {
 
     &:hover {
         cursor: pointer;
-        text-decoration: underline;
+        text-decoration: underline var(--couleur-principale);
+
     }
 }
 
@@ -800,7 +809,7 @@ abbr[title] {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin: 10px 0px;
+    margin: 10px 5px;
 }
 
 .div_form label {
@@ -814,6 +823,14 @@ abbr[title] {
     background: none;
     border: none;
     border-bottom: solid 1px var(--couleur-principale);
+    outline: none;
+    padding: 2px;
+}
+
+.div_form textarea {
+    font-size: 20px;
+    background: none;
+    border: solid 1px var(--couleur-principale);
     outline: none;
     padding: 2px;
 }
@@ -843,4 +860,42 @@ abbr[title] {
     width: 20px;
     height: 20px;
     cursor: pointer;
+}
+
+.div_note {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    width: 100%;
+    padding: 15px;
+    border: solid 1px var(--couleur-principale);
+    position: relative;
+}
+
+.div_button_note {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 5%;
+    right: 0.5%;
+
+    & img {
+        background: none;
+        cursor: pointer;
+        margin: 0px 5px;
+        height: 15px;
+        width: 15px;
+    }
+
+    & button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        height: 20px;
+        width: 20px;
+
+        &:hover {
+            color: red;
+        }
+    }
 }

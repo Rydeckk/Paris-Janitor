@@ -65,13 +65,16 @@ export function AddServiceLogement({servicesActif, onAdd, space}: AddServiceLoge
     }
 
     return (
-        <div className="div_liste">
-            <select value={serviceIdSelected} onChange={(e) => setServiceIdSelected(+e.target.value)} className="select" style={{margin: "10px"}}>
-                <option>Sélectionner un service</option>
-                {services.map((service) => (
-                    <option key={service.id} value={service.id}>{service.nom}</option>
-                ))}
-            </select>
+        <div className="div_liste" style={{height: "200px"}}>
+            <div className="div_form">
+                <select value={serviceIdSelected} onChange={(e) => setServiceIdSelected(+e.target.value)} >
+                    <option>Sélectionner un service</option>
+                    {services.map((service) => (
+                        <option key={service.id} value={service.id}>{service.nom}</option>
+                    ))}
+                </select>
+            </div>
+            
             {selectedService && (<label className="label_info"><b>Prix à payer : </b>{selectedService.prix} €</label>)}
             <button className="button" disabled={!selectedService} onClick={handleClickAdd}>Ajouter Service</button>
         </div>

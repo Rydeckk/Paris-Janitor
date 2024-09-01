@@ -7,6 +7,7 @@ import { LogementCalendrier } from "./LogementCalendrier";
 import { LogementReservation } from "./LogementReservation";
 import { LogementService } from "./LogementService";
 import { LogementHistorique } from "./LogementHistorique";
+import { ListeEquipement } from "../Equipement/ListeEquipement";
 
 interface LogementDetailProps {
     logement: Logement
@@ -28,6 +29,7 @@ export function LogementDetail({logement, onUpdate, onReturn}: LogementDetailPro
                 <Route path={"/service"} element={<LogementService logement={logement} onUpdate={(logement) => handleUpdate(logement)} onReturn={onReturn} space="owner"/>}/>
                 <Route path={"/historique"} element={<LogementHistorique logement={logement} onReturn={onReturn}/>}/>
                 <Route path={"/reservation"} element={<LogementReservation logement={logement} onUpdate={(logement) => handleUpdate(logement)} onReturn={onReturn}/>}/>
+                <Route path={"/equipement"} element={<ListeEquipement logement={logement} onUpdate={(logement) => handleUpdate(logement)} onReturn={onReturn}/>}/>
             </Routes>
         </div>
     )

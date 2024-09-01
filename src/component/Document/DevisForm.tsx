@@ -191,11 +191,12 @@ export function DevisForm({onSubmit, devisData}: DevisFormProps) {
                 <div style={isFormService ? {width: "100%", marginBottom: "35px"} : {width: "100%", marginBottom: "35px", padding: "5px 15px"}}>
                     {!isFormService && (<ListeServices services={services} onClickAdd={() => handleClickAdd()} onDelete={(serviceDeleted) => handleDelete(serviceDeleted)}/>)}
                     {isFormService && (<AddServiceLogement servicesActif={services} onAdd={(serviceAdded) => handleAddService(serviceAdded)} space="owner"/>)}
-
+                    
                     {isFormService && (<div className="div_return">
                         <img src="/icone/return.png"></img>
                         <label onClick={() => setIsFormService(false)}>Services sélectionnés</label>
                     </div>)}
+                    
                 </div>
 
                 <div style={{width: "100%"}}>

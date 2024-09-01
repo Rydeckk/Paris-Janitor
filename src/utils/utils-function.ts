@@ -99,3 +99,15 @@ export function getStatutSouscription(dateDebut: Date, dateFin: Date): string {
         return "Pas encore commencé"
     }
 }
+
+export function dateIsPasse(dateDebut: Date, dateFin: Date): boolean {
+    const newDateDebut = new Date(dateDebut)
+    const newDateFin = new Date(dateFin)
+    const today = new Date()
+
+    if(newDateDebut < today && newDateFin < today) {
+        return true
+    } else {
+        return false
+    }
+}

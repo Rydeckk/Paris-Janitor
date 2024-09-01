@@ -5,7 +5,11 @@ import { Service, ServiceCreate, spaceColors, typeServiceString } from "../../ty
 import { ListeServices } from "../Logement/ListeServices"
 import { PopupAddService } from "./PopupAddService"
 
-export function ListeServicesDisponible() {
+interface ListeServicesProps {
+    onClick: (service: Service) => void
+}
+
+export function ListeServicesDisponible({onClick}: ListeServicesProps) {
     const [services, setServices] = useState<Service[]>([])
     const [serviceUpdated, setServiceUpdated] = useState<Service>()
     const [isOpen, setIsOpen] = useState(false)
@@ -83,12 +87,15 @@ export function ListeServicesDisponible() {
                     <div>
                         <label className="label_info">Montant</label>
                     </div>
+                    <div>
+                        <label className="label_info">Note</label>
+                    </div>
                     {user.user?.role.isAdmin && (<div>
                         <label className="label_info">Actions</label>
                     </div>)}
                 </div>
             {services.map((service) => (
-                <div key={service.id} className="div_row" style={{justifyContent: "space-between"}}>
+                <div key={service.id} className="div_row div_row_clickable" style={{justifyContent: "space-between"}} onClick={() => onClick(service)}>
                     <div>
                         <label className="label_info_classic">{service.nom}</label>
                     </div>
@@ -97,6 +104,12 @@ export function ListeServicesDisponible() {
                     </div>)}
                     <div>
                         <label className="label_info_classic">{service.prix} €</label>
+                    </div>
+                    <div>
+                        <label className="label_info_classic">{service.notes.length > 0 ? 
+                            (service.notes.reduce((acc,note) => (+acc + +note.numero),0) / service.notes.length).toFixed(2) + " /5 (" + service.notes.length + ")"
+                            : "Aucune note"}
+                        </label>
                     </div>
                     {user.user?.role.isAdmin && (<div>
                         <img src="/icone/crayon.png" className="little_icone_clickable" onClick={() => handleClickUpdateService(service)}/>

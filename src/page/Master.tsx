@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { NavBarAdmin } from "../component/NavbarHome/NavBarAdmin";
 import { useUserContext } from "../main";
-import { spaceColors, TypeUser } from "../types/types";
+import { Service, spaceColors, TypeUser } from "../types/types";
 import { getTypeUser } from "../utils/utils-function";
 import { HomeAdmin } from "./HomeAdmin";
 import { ListeServicesDisponible } from "../component/Service/ListeServicesDisponible";
@@ -13,9 +13,11 @@ import { Abonnement } from "../component/Abonnement/Abonnement";
 import { Document } from "../component/Document/Document";
 import { Logement } from "../component/Logement/Logement";
 import { ListeOperation } from "../component/Operation/ListeOperation";
+import { NoteService } from "../component/Service/NoteService";
 
 export function Master() {
     const [typeCompte, setTypeCompte] = useState<TypeUser>("admin")
+    const [service, setService] = useState<Service>()
     const user = useUserContext()
     const navigate = useNavigate()
 
@@ -40,6 +42,12 @@ export function Master() {
             document.documentElement.style.setProperty('--couleur-principale', spaceColors["admin"])
         }
     }, [typeCompte])
+
+    const handleClickService = (service: Service) => {
+        setService(service)
+        navigate("/master/service/note")
+    }
+
     
     return (
         <div>
@@ -47,7 +55,8 @@ export function Master() {
             <Routes>
                 <Route path="/" element={<HomeAdmin />}/>
                 <Route path="/logement/*" element={<Logement />} />
-                <Route path="/service/*" element={<ListeServicesDisponible />}/>
+                <Route path="/service" element={<ListeServicesDisponible onClick={(service) => handleClickService(service)}/>}/>
+                <Route path="/service/note" element={service && (<NoteService service={service}/>)}/>
                 <Route path="/user/*" element={<Utilisateur />}/>
                 <Route path="/abonnement/*" element={<Abonnement />}/>
                 <Route path="/document/*" element={<Document />}/>

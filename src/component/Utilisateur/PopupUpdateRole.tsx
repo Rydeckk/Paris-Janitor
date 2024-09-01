@@ -48,7 +48,8 @@ export function PopupUpdateRole({isOpen, onClose, userUpdate, onUpdate}: PopupUp
             phone: phone, 
             email: email,
             role: roleChoose,
-            bannissements: userUpdate.bannissements
+            bannissements: userUpdate.bannissements,
+            notes: userUpdate.notes
         })
 
     }

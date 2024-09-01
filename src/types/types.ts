@@ -19,6 +19,7 @@ export type Logement = {
     reservations: Reservation[]
     user: UserInfo
     services: Service[]
+    equipements: Equipement[]
 }
 
 export type CreateLogement = {
@@ -57,7 +58,8 @@ export type Service = {
     type: TypeService
     prix: number
     logements: Logement[]
-    reservations: Reservation[]
+    reservations: Reservation[],
+    notes: Note[]
 }
 
 export type ServiceCreate = {
@@ -88,7 +90,8 @@ export type UserInfoWithId = {
     phone: string,
     email: string,
     role: Role,
-    bannissements: Bannissement[]
+    bannissements: Bannissement[],
+    notes: Note[]
 }
 
 export type DevisData = {
@@ -212,6 +215,33 @@ export type Operation = {
     user: UserInfoWithId
 }
 
+export type Note = {
+    id: number, 
+    titre: string, 
+    numero: number, 
+    commentaire: string, 
+    user: UserInfoWithId, 
+    service: Service
+}
+
+export type CreateNote = {
+    titre: string, 
+    numero: number, 
+    commentaire: string
+}
+
+export type Equipement = {
+    id: number, 
+    nom: string, 
+    etat: EtatEquip, 
+    logement: Logement
+}
+
+export type CreateEquipement = {
+    nom: string, 
+    etat: EtatEquip
+}
+
 export type TypeUser = "traveler" | "owner" | "admin"
 
 export type TypeSpace = "traveler" | "owner" | "admin"
@@ -225,6 +255,8 @@ export type TypeLocation = "entier" | "partiel"
 export type TypeService = "traveler" | "owner"
 
 export type TypeOperation = "paye" | "gagne"
+
+export type EtatEquip = "neuf" | "tresBonEtat" | "bonEtat" | "etatUsage" | "mauvaisEtat"
 
 export const spaceColors: Record<TypeSpace, string> = {
     traveler: '#bda34d', 
@@ -257,6 +289,14 @@ export const typeBienString: Record<TypeBien, string> = {
 export const typeServiceString: Record<TypeService, string> = {
     traveler: "Voyageur",
     owner: "Bailleur"
+}
+
+export const EtatEquipString: Record<EtatEquip, string> = {
+    neuf: "Neuf",
+    tresBonEtat: "Très bon état",
+    bonEtat: "Bon état",
+    etatUsage: "Etat d'usage",
+    mauvaisEtat: "Mauvais état"
 }
 
 export type country = {

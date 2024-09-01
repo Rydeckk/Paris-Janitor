@@ -65,6 +65,10 @@ export function MonAbonnement() {
                         <label>Date de fin</label>
                         <input disabled={true} value={formatDateToLocalString(new Date(souscription.dateFin))}></input>
                     </div>
+                    <div className="div_form">
+                        <label>Montant</label>
+                        <input disabled={true} value={(+souscription.montant).toFixed(2) + " €"}></input>
+                    </div>
                     </>)}
                     {!souscription && (<label className="label_info">Aucun abonnement en cours</label>)}
                     <button className="button" onClick={() => setIsPaiement(true)}>{souscription ? "Prolonger" : "Renouveler"}</button>

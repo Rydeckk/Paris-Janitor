@@ -9,10 +9,12 @@ import { useNavigate } from "react-router-dom";
 import { getMyActualSouscription } from "../../request/requestSouscription";
 
 interface ListeLogementsProps {
-    statut?: StatutLogement
+    statut?: StatutLogement,
+    onReturn?: () => void,
+    onClickLogement?: () => void
 }
 
-export function ListeLogements({statut}: ListeLogementsProps) {
+export function ListeLogements({statut, onReturn, onClickLogement}: ListeLogementsProps) {
     const [listeLogements, setListeLogements] = useState<Array<Logement>>([])
     const [typeCompte, setTypeCompte] = useState<TypeUser>("traveler")
     const [logement, setLogement] = useState<Logement>()
@@ -56,8 +58,20 @@ export function ListeLogements({statut}: ListeLogementsProps) {
         setLogement(logementUpdate)
     }
 
+    const handleClickLogement = (logement: Logement) => {
+        setLogement(logement)
+        if(onClickLogement) {
+            onClickLogement()
+        }
+    }
+
     const handleReturn = () => {
         setLogement(undefined)
+
+        if(onReturn) {
+            onReturn()
+        }
+        
         if(typeCompte === "admin") {
             navigate("/master/logement")
         } else if (typeCompte === "owner") {
@@ -76,12 +90,12 @@ export function ListeLogements({statut}: ListeLogementsProps) {
                 <div className="div_liste_horizontal">
                     {statut && statut === "attenteValidation" && (<label className="label_info">Aucun logement en attente de validation</label>)}
                     {listeLogements.map((logement) => (
-                        <LogementComponent key={logement.id} logement={logement} onClick={(logement) => setLogement(logement)}/>
+                        <LogementComponent key={logement.id} logement={logement} onClick={(logement) => handleClickLogement(logement)}/>
                     ))}
                 </div>
             </div>)}
             
-            {logement && (<LogementDetail logement={logement} onUpdate={(logement) => handleUpdate(logement)} onReturn={() => handleReturn()}/>)}
+            {logement && (<LogementDetail logement={logement} onUpdate={(logement) => handleUpdate(logement)} onReturn={handleReturn}/>)}
         </div>
         
     )
