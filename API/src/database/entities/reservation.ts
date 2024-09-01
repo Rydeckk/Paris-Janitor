@@ -36,11 +36,11 @@ export class Reservation {
     @JoinColumn()
     facture: Facture
 
-    @OneToOne(() => EtatLieu, etatLieu => etatLieu.reservation)
+    @OneToOne(() => EtatLieu, etatLieu => etatLieu.reservationEntree)
     @JoinColumn()
     etatLieuEntree: EtatLieu
 
-    @OneToOne(() => EtatLieu, reservation => reservation.reservation)
+    @OneToOne(() => EtatLieu, reservation => reservation.reservationSortie)
     @JoinColumn()
     etatLieuSortie: EtatLieu
 

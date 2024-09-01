@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Reservation } from "./reservation";
+import { EtatEquipement } from "./etatEquipement";
 
 @Entity({name: "EtatLieux"})
 export class EtatLieu {
@@ -18,16 +19,25 @@ export class EtatLieu {
     @CreateDateColumn({type: "datetime"})
     dateCreation: Date
 
-    @OneToOne(() => Reservation, reservation => reservation.etatLieuEntree || reservation.etatLieuSortie)
-    @JoinColumn()
-    reservation: Reservation
+    @OneToMany(() => EtatEquipement, etatEquipement => etatEquipement.etatLieu)
+    etatEquipements: EtatEquipement[]
 
-    constructor(id: number, nomEtatLieu: string, nom: string, prenom: string, dateCreation: Date, reservation: Reservation) {
+    @OneToOne(() => Reservation, reservation => reservation.etatLieuEntree)
+    @JoinColumn()
+    reservationEntree: Reservation
+
+    @OneToOne(() => Reservation, reservation => reservation.etatLieuSortie)
+    @JoinColumn()
+    reservationSortie: Reservation
+
+    constructor(id: number, nomEtatLieu: string, nom: string, prenom: string, dateCreation: Date, etatEquipements: EtatEquipement[], reservationEntree: Reservation, reservationSortie: Reservation) {
         this.id = id,
         this.nomEtatLieu = nomEtatLieu,
         this.nom = nom, 
         this.prenom = prenom,
         this.dateCreation = dateCreation,
-        this.reservation = reservation
+        this.etatEquipements = etatEquipements,
+        this.reservationEntree = reservationEntree,
+        this.reservationSortie = reservationSortie
     }
 }

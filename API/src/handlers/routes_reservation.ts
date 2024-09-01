@@ -4,7 +4,7 @@ import { authMiddleware, authMiddlewareAdmin, authMiddlewareOwner } from "./midd
 import { AppDataSource } from "../database/database"
 import { getConnectedUser } from "../domain/user-usecase"
 import { generateValidationErrorMessage } from "./validators/generate-validation-messages"
-import { createReservationValidation, deleteReservationValidation, getListReservationValidation, payeReservationValidation, serviceReservationValidation } from "./validators/reservation-validator"
+import { createReservationValidation, deleteReservationValidation, getListReservationValidation, payeReservationValidation, reservationEtatLieuValidation, serviceReservationValidation } from "./validators/reservation-validator"
 import { LogementUseCase } from "../domain/logement-usecase"
 import { Reservation } from "../database/entities/reservation"
 import { ReservationUseCase } from "../domain/reservation-usecase"
@@ -336,5 +336,27 @@ export const ReservationHandler = (app: express.Express) => {
             clientSecret: paymentIntent.client_secret,    
           });
       });
+
+      app.get("/reservationEtatLieu", authMiddlewareAdmin, async (req: Request, res: Response) => {
+        const validation = reservationEtatLieuValidation.validate(req.query)
+
+        if(validation.error) {
+            res.status(400).send(generateValidationErrorMessage(validation.error.details))
+            return
+        }
+
+        const listReservationRequest = validation.value
+
+        try {
+            
+            const reservationUseCase = new ReservationUseCase(AppDataSource)
+            const listReservation = await reservationUseCase.listReservationEtatLieu(listReservationRequest.type)
+            res.status(200).send(listReservation.reservations)
+
+        }catch(error) {
+            console.log(error)
+            res.status(500).send({error: "Internal error"})
+        }
+    })
 }
 

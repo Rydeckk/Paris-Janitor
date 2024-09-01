@@ -15,6 +15,7 @@ import { BannissementHandler } from "./routes_bannissement"
 import { OperationHandler } from "./routes_operation"
 import { NoteHandler } from "./routes_note"
 import { EquipementHandler } from "./routes_equipement"
+import { EtatLieuHandler } from "./routes_etatLieu"
 
 export const initRoutes = (app: express.Express) => {
 
@@ -34,4 +35,5 @@ export const initRoutes = (app: express.Express) => {
     OperationHandler(app)
     NoteHandler(app)
     EquipementHandler(app)
+    EtatLieuHandler(app)
 }

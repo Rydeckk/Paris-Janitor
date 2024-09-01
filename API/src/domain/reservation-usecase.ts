@@ -25,6 +25,8 @@ export class ReservationUseCase {
         query.innerJoinAndSelect("reservation.facture", "facture")
         query.leftJoinAndSelect("reservation.services", "service")
         query.leftJoinAndSelect("service.notes","note")
+        query.leftJoinAndSelect("reservation.etatLieuSortie", "etlSortie")
+        query.leftJoinAndSelect("reservation.etatLieuEntree", "etlEntree")
         query.addOrderBy("reservation.dateCreation", "DESC")
 
         if(filters.logementId !== undefined) {
@@ -33,6 +35,34 @@ export class ReservationUseCase {
 
         if(filters.userId !== undefined) {
             query.andWhere("user.id = :userId", {userId: filters.userId})
+        }
+
+        const reservations = await query.getMany()
+        return {
+            reservations
+        }
+    }
+
+    async listReservationEtatLieu(type: "entree" | "sortie"): Promise<{reservations: Reservation[]}> {
+        const query = this.db.createQueryBuilder(Reservation, 'reservation')
+        query.innerJoinAndSelect("reservation.user","user")
+        query.innerJoinAndSelect("reservation.logement", "logement")
+        query.innerJoinAndSelect("reservation.facture", "facture")
+        query.leftJoinAndSelect("reservation.services", "service")
+        query.leftJoinAndSelect("service.notes","note")
+        query.leftJoinAndSelect("reservation.etatLieuSortie", "etlSortie")
+        query.leftJoinAndSelect("reservation.etatLieuEntree", "etlEntree")
+        query.leftJoinAndSelect("logement.equipements","equip")
+        query.addOrderBy("reservation.dateCreation", "DESC")
+
+        if(type === "entree") {
+            query.andWhere("etlEntree.id IS NULL")
+            query.andWhere("reservation.dateDebut <= :date", {date: new Date()})
+        }
+
+        if(type === "sortie") {
+            query.andWhere("etlSortie.id IS NULL")
+            query.andWhere("reservation.dateFin <= :date", {date: new Date()})
         }
 
         const reservations = await query.getMany()

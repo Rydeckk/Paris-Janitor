@@ -52,3 +52,11 @@ interface PayeReservationRequest {
 export const payeReservationValidation = Joi.object<PayeReservationRequest>({
     montant: Joi.number().min(1).required()
 })
+
+interface ReservationEtatLieuRequest {
+    type: "entree" | "sortie"
+}
+
+export const reservationEtatLieuValidation = Joi.object<ReservationEtatLieuRequest>({
+    type: Joi.string().allow("entree","sortie").required()
+}) 

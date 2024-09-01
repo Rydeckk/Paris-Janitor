@@ -5,6 +5,8 @@ import { Reservation } from '../database/entities/reservation';
 import { differenceEnJours, formatDateTimeToLocalString, formatDateToLocalString } from '../utils/utils-function';
 import { Service } from '../database/entities/service';
 import { Souscription } from '../database/entities/souscription';
+import { CreateEtatLieuRequest } from '../handlers/validators/etatLieu-validator';
+import { User } from '../database/entities/user';
 
 
 
@@ -354,5 +356,81 @@ export function generatePdfFactureSouscription(souscription: Souscription, time:
 
     doc.end()
     
+    return pdfPath
+}
+
+export function generatePdfEtatLieu(etatLieuData: CreateEtatLieuRequest, user: User, reservation: Reservation) {
+    const doc = new PDFDocument({size: "A4", margin: 50})
+    try {
+        fs.ensureDirSync("uploads/etatLieux/")
+    } catch (err) {}
+    const today = new Date()
+    const pdfPath = "uploads/etatLieux/etl_"+ today.getTime() + "_" + user.lastName + "_" + user.firstName + ".pdf"
+
+    const stream = fs.createWriteStream(pdfPath)
+
+    doc.pipe(stream)
+    doc.font("Helvetica")
+
+    doc.fillColor('#444444')
+		.fontSize(20)
+		.text('Paris Janitor', 50, 57, {continued: false})
+		.fontSize(10)
+        .text(user.lastName + " " + user.firstName, 200, 65, {align: "right"})
+		.text('23, rue Montorgueil', 50, 80)
+		.text('Paris, 75002, France', 50, 90)
+        .text(formatDateTimeToLocalString(new Date()),200,75, {align: "right"})
+		.moveDown()
+
+    doc.fillColor('#584bd1')
+        .fontSize(24)
+        .text(etatLieuData.type === "entree" ? "Etat des lieux d'entrée" : "Etat des lieux de sortie", 70, 120, {align: "center"})
+        .moveDown()
+
+    doc.fillColor("black")
+        .font("Helvetica-Bold")
+        .fontSize(14)
+        .text("Equipement",60, 230, {width: 140})
+        .text("Etat",220, 230, {width: 140})
+
+    doc.font("Helvetica")
+        .fontSize(12)
+
+    doc.strokeColor("#584bd1")
+        .lineWidth(1)
+        .moveTo(50, 250)
+        .lineTo(550, 250)
+        .stroke()
+
+    const yInitial = 250
+    let y = 260
+    etatLieuData.etatsEquipements.forEach((etatEquip) => {
+        doc.text(etatEquip.equipement.nom ,60, y, {width: 140})
+        .text(etatEquip.etat ,220, y, {width: 140})
+
+        y += 15
+
+        doc.strokeColor("#584bd1")
+        .lineWidth(1)
+        .moveTo(50, y)
+        .lineTo(550, y)
+        .stroke()
+
+        y += 15
+    })
+
+    doc.strokeColor("#584bd1")
+        .lineWidth(1)
+        .moveTo(50, yInitial)
+        .lineTo(50, y-15)
+        .stroke()
+        .strokeColor("#584bd1")
+        .lineWidth(1)
+        .moveTo(550, yInitial)
+        .lineTo(550, y-15)
+        .stroke()
+
+    doc.end()
+
     return pdfPath
 }

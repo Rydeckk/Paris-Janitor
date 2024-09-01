@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Logement } from "./logement";
 import { EtatEquip } from "../../types/types";
+import { EtatEquipement } from "./etatEquipement";
 
 @Entity({name: "Equipement"})
 export class Equipement {
